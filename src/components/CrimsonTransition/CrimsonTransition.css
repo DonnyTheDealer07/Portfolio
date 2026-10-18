@@ -1,4 +1,9 @@
 
+/* ============================================
+   CRIMSON TRANSITION
+   PURE OBSIDIAN BLACK
+============================================ */
+
 .crimson-transition {
   position: fixed;
   inset: 0;
@@ -6,7 +11,10 @@
   overflow: hidden;
   pointer-events: all;
   isolation: isolate;
+  background: #000;
 }
+
+/* BLACK SPLIT PANELS */
 
 .transition-top,
 .transition-bottom {
@@ -14,7 +22,7 @@
   left: 0;
   right: 0;
   height: 50%;
-  background: #08090b;
+  background: #000;
   will-change: transform;
 }
 
@@ -27,6 +35,8 @@
   bottom: 0;
   border-top: 1px solid rgba(255, 48, 79, 0.3);
 }
+
+/* CRIMSON ENERGY DOT */
 
 .transition-dot {
   position: absolute;
@@ -41,6 +51,8 @@
   z-index: 3;
   opacity: 0;
 }
+
+/* CRIMSON ENERGY LINE */
 
 .transition-line {
   position: absolute;
@@ -58,6 +70,8 @@
   will-change: transform;
 }
 
+/* TRANSITION TEXT */
+
 .transition-label {
   position: absolute;
   z-index: 3;
@@ -69,4 +83,134 @@
   letter-spacing: 0.35em;
   color: #e6b8c0;
   opacity: 0;
+}
+
+/* ============================================
+   GLOBAL BLACK BACKGROUND CONSISTENCY
+============================================ */
+
+html,
+body,
+#root {
+  background-color: #000 !important;
+}
+
+/* ============================================
+   CINEMATIC INTRO
+============================================ */
+
+.cinematic-intro {
+  background: #000 !important;
+}
+
+.intro-static-background {
+  background: #000 !important;
+}
+
+/* Preserve the animation grid and particles. */
+.intro-grid,
+.intro-particles {
+  background-color: transparent !important;
+}
+
+/* ============================================
+   SECTION 01 — HERO
+============================================ */
+
+.hero.hero-obsidian,
+.hero.hero-obsidian.hero-refined {
+  background: #000 !important;
+}
+
+/* Remove the burgundy ambient wash. */
+.hero-obsidian .hero-glow,
+.hero-refined .hero-glow {
+  background: transparent !important;
+}
+
+/* Keep the interactive spotlight and sculpture. */
+.hero-refined .hero-spotlight {
+  background-color: transparent !important;
+}
+
+/* Black gradient around the 3D sculpture. */
+.hero-obsidian-vignette,
+.hero-refined .hero-obsidian-vignette {
+  background:
+    linear-gradient(
+      90deg,
+      #000 0%,
+      rgba(0, 0, 0, 0.84) 20%,
+      rgba(0, 0, 0, 0.28) 44%,
+      transparent 70%
+    ),
+    linear-gradient(
+      0deg,
+      #000 0%,
+      transparent 20%,
+      transparent 85%,
+      rgba(0, 0, 0, 0.3) 100%
+    ) !important;
+}
+
+/* Black reveal veil, same GSAP behavior. */
+.hero-refined .hero-reveal-veil {
+  background: #000 !important;
+}
+
+/* ============================================
+   SECTION 02 — ABOUT
+============================================ */
+
+.about-experience,
+.about-panel,
+.about-panel-person {
+  background-color: #000 !important;
+}
+
+/* Replace panel-specific tinted backgrounds. */
+.about-panel-person {
+  background: #000 !important;
+}
+
+/* Keep the portrait visible. */
+.about-person-image {
+  background-color: #000 !important;
+}
+
+/* Keep the portrait shading neutral black. */
+.about-image-shade {
+  background:
+    linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.82),
+      transparent 42%
+    ),
+    linear-gradient(
+      90deg,
+      transparent 65%,
+      rgba(0, 0, 0, 0.65)
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.3),
+      transparent 35%
+    ) !important;
+}
+
+/* Preserve cards, typography and animated accents. */
+.about-track {
+  background-color: #000;
+}
+
+/* ============================================
+   REDUCED MOTION
+============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .transition-top,
+  .transition-bottom,
+  .transition-line {
+    will-change: auto;
+  }
 }

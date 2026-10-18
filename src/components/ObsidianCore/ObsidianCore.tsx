@@ -1,14 +1,24 @@
 
 import { useEffect, useRef } from "react";
+import type { RefObject } from "react";
 import * as THREE from "three";
+
 import "./ObsidianCore.css";
+
+type PointerPosition = {
+  x: number;
+  y: number;
+  inside: boolean;
+};
 
 type ObsidianCoreProps = {
   active?: boolean;
+  pointerRef?: RefObject<PointerPosition>;
 };
 
 export default function ObsidianCore({
   active = true,
+  pointerRef,
 }: ObsidianCoreProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef(active);
@@ -23,6 +33,10 @@ export default function ObsidianCore({
 
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    const coarsePointer = window.matchMedia(
+      "(pointer: coarse)"
     ).matches;
 
     let renderer: THREE.WebGLRenderer;
@@ -41,15 +55,20 @@ export default function ObsidianCore({
     renderer.setPixelRatio(
       Math.min(window.devicePixelRatio || 1, 1.75)
     );
+
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.5;
+
+    // A transparent WebGL surface eliminates
+    // the rectangular background behind the core.
     renderer.setClearColor(0x000000, 0);
 
     renderer.domElement.setAttribute(
       "aria-hidden",
       "true"
     );
+
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
@@ -60,15 +79,21 @@ export default function ObsidianCore({
       0.1,
       100
     );
+
     camera.position.set(0, 0, 9.6);
 
     const sculpture = new THREE.Group();
     scene.add(sculpture);
 
-    const outerGeometry = new THREE.IcosahedronGeometry(
-      2.25,
-      5
-    );
+    const rotatingCore = new THREE.Group();
+    sculpture.add(rotatingCore);
+
+    // ----------------------------------------
+    // FACETED OBSIDIAN GEOMETRY
+    // ----------------------------------------
+
+    const outerGeometry =
+      new THREE.IcosahedronGeometry(2.25, 5);
 
     const positions = outerGeometry.attributes.position;
     const vertex = new THREE.Vector3();
@@ -81,10 +106,16 @@ export default function ObsidianCore({
       const distortion =
         1 +
         0.13 *
-          Math.sin(normal.x * 7.3 + normal.y * 4.1) *
-          Math.cos(normal.z * 5.7 - normal.x * 3.2) +
+          Math.sin(
+            normal.x * 7.3 + normal.y * 4.1
+          ) *
+          Math.cos(
+            normal.z * 5.7 - normal.x * 3.2
+          ) +
         0.055 *
-          Math.sin(normal.y * 13.1 + normal.z * 8.4);
+          Math.sin(
+            normal.y * 13.1 + normal.z * 8.4
+          );
 
       vertex.multiplyScalar(distortion);
 
@@ -113,12 +144,11 @@ export default function ObsidianCore({
       outerGeometry,
       obsidianMaterial
     );
-    sculpture.add(outerMesh);
 
-    const innerGeometry = new THREE.IcosahedronGeometry(
-      2.19,
-      2
-    );
+    rotatingCore.add(outerMesh);
+
+    const innerGeometry =
+      new THREE.IcosahedronGeometry(2.19, 2);
 
     const innerMaterial =
       new THREE.MeshBasicMaterial({
@@ -133,19 +163,21 @@ export default function ObsidianCore({
       innerGeometry,
       innerMaterial
     );
-    sculpture.add(innerMesh);
+
+    rotatingCore.add(innerMesh);
 
     const edgeGeometry = new THREE.EdgesGeometry(
       new THREE.IcosahedronGeometry(2.265, 1),
       22
     );
 
-    const edgeMaterial = new THREE.LineBasicMaterial({
-      color: 0xff3153,
-      transparent: true,
-      opacity: 0.18,
-      depthWrite: false,
-    });
+    const edgeMaterial =
+      new THREE.LineBasicMaterial({
+        color: 0xff3153,
+        transparent: true,
+        opacity: 0.18,
+        depthWrite: false,
+      });
 
     const edgeLines = new THREE.LineSegments(
       edgeGeometry,
@@ -153,18 +185,24 @@ export default function ObsidianCore({
     );
 
     edgeLines.scale.setScalar(1.025);
-    sculpture.add(edgeLines);
+    rotatingCore.add(edgeLines);
+
+    // ----------------------------------------
+    // LIGHTING
+    // ----------------------------------------
 
     const ambient = new THREE.AmbientLight(
       0x65708b,
       1.6
     );
+
     scene.add(ambient);
 
     const keyLight = new THREE.DirectionalLight(
       0xe3e7ff,
       4.8
     );
+
     keyLight.position.set(-4, 5, 7);
     scene.add(keyLight);
 
@@ -174,6 +212,7 @@ export default function ObsidianCore({
       13,
       1.7
     );
+
     crimsonLight.position.set(3.2, -1.1, 3.4);
     scene.add(crimsonLight);
 
@@ -183,6 +222,7 @@ export default function ObsidianCore({
       12,
       1.6
     );
+
     rimLight.position.set(-3, -2.5, -2);
     scene.add(rimLight);
 
@@ -192,68 +232,126 @@ export default function ObsidianCore({
       12,
       1.8
     );
+
     blueLight.position.set(0, 4, -3);
     scene.add(blueLight);
 
-    const haloGeometry = new THREE.TorusGeometry(
-      2.9,
-      0.008,
-      8,
-      160
-    );
+    // ----------------------------------------
+    // INDEPENDENT ORBITAL ENERGY RINGS
+    // ----------------------------------------
 
-    const haloMaterial = new THREE.MeshBasicMaterial({
-      color: 0xff304f,
-      transparent: true,
-      opacity: 0.22,
-      depthWrite: false,
-    });
+    const orbitGroup = new THREE.Group();
+    sculpture.add(orbitGroup);
 
-    const halo = new THREE.Mesh(
-      haloGeometry,
-      haloMaterial
-    );
-    halo.rotation.x = 1.12;
-    halo.rotation.y = -0.4;
-    sculpture.add(halo);
-
-    const secondHalo = new THREE.Mesh(
-      new THREE.TorusGeometry(
-        3.15,
-        0.004,
+    const createOrbit = (
+      radius: number,
+      opacity: number,
+      thickness: number,
+      rotation: [number, number, number]
+    ) => {
+      const geometry = new THREE.TorusGeometry(
+        radius,
+        thickness,
         8,
-        160
-      ),
-      new THREE.MeshBasicMaterial({
+        180
+      );
+
+      const material = new THREE.MeshBasicMaterial({
         color: 0xff304f,
         transparent: true,
-        opacity: 0.12,
+        opacity,
         depthWrite: false,
-      })
-    );
+      });
 
-    secondHalo.rotation.x = 0.4;
-    secondHalo.rotation.y = 1.2;
-    sculpture.add(secondHalo);
+      const ring = new THREE.Mesh(
+        geometry,
+        material
+      );
+
+      ring.rotation.set(...rotation);
+      orbitGroup.add(ring);
+
+      const particleGeometry =
+        new THREE.SphereGeometry(0.035, 8, 8);
+
+      const particleMaterial =
+        new THREE.MeshBasicMaterial({
+          color: 0xff4867,
+        });
+
+      const particle = new THREE.Mesh(
+        particleGeometry,
+        particleMaterial
+      );
+
+      const particlePivot = new THREE.Group();
+      particlePivot.rotation.copy(ring.rotation);
+
+      particle.position.x = radius;
+      particlePivot.add(particle);
+
+      orbitGroup.add(particlePivot);
+
+      return {
+        ring,
+        particlePivot,
+        geometry,
+        material,
+        particleGeometry,
+        particleMaterial,
+      };
+    };
+
+    const orbits = [
+      createOrbit(
+        2.9,
+        0.29,
+        0.008,
+        [1.12, -0.4, 0]
+      ),
+      createOrbit(
+        3.15,
+        0.17,
+        0.005,
+        [0.4, 1.2, 0]
+      ),
+      createOrbit(
+        3.43,
+        0.11,
+        0.004,
+        [1.65, 0.15, 0.3]
+      ),
+    ];
+
+    // ----------------------------------------
+    // EXISTING SCULPTURE PARTICLES
+    // ----------------------------------------
 
     const particlesCount = 160;
+
     const particlePositions = new Float32Array(
       particlesCount * 3
     );
 
-    for (let i = 0; i < particlesCount; i++) {
+    for (let index = 0; index < particlesCount; index++) {
       const radius = 3.2 + Math.random() * 2.6;
       const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
+      const phi = Math.acos(
+        2 * Math.random() - 1
+      );
 
-      particlePositions[i * 3] =
-        radius * Math.sin(phi) * Math.cos(theta);
+      particlePositions[index * 3] =
+        radius *
+        Math.sin(phi) *
+        Math.cos(theta);
 
-      particlePositions[i * 3 + 1] =
+      particlePositions[index * 3 + 1] =
         radius * Math.cos(phi);
 
-      particlePositions[i * 3 + 2] =
-        radius * Math.sin(phi) * Math.sin(theta);
+      particlePositions[index * 3 + 2] =
+        radius *
+        Math.sin(phi) *
+        Math.sin(theta);
     }
 
     const particlesGeometry =
@@ -281,42 +379,60 @@ export default function ObsidianCore({
       particlesGeometry,
       particlesMaterial
     );
+
     scene.add(particles);
+
+    // ----------------------------------------
+    // POINTER TRACKING WITH WEIGHTED INERTIA
+    // ----------------------------------------
 
     const pointer = {
       x: 0,
       y: 0,
+      targetX: 0,
+      targetY: 0,
+    };
+
+    const localPointer = {
+      x: 0.5,
+      y: 0.5,
+      inside: false,
     };
 
     const onPointerMove = (event: PointerEvent) => {
-      const bounds = container.getBoundingClientRect();
+      if (pointerRef || coarsePointer) return;
 
-      pointer.x =
-        ((event.clientX - bounds.left) /
-          bounds.width) *
-          2 -
-        1;
+      const bounds =
+        container.getBoundingClientRect();
 
-      pointer.y =
-        ((event.clientY - bounds.top) /
-          bounds.height) *
-          2 -
-        1;
+      localPointer.x =
+        (event.clientX - bounds.left) /
+        Math.max(bounds.width, 1);
+
+      localPointer.y =
+        (event.clientY - bounds.top) /
+        Math.max(bounds.height, 1);
+
+      localPointer.inside = true;
     };
 
     const onPointerLeave = () => {
-      pointer.x = 0;
-      pointer.y = 0;
+      localPointer.inside = false;
     };
 
     container.addEventListener(
       "pointermove",
       onPointerMove
     );
+
     container.addEventListener(
       "pointerleave",
       onPointerLeave
     );
+
+    // ----------------------------------------
+    // RESPONSIVE CANVAS
+    // ----------------------------------------
 
     const resize = () => {
       const width = Math.max(
@@ -330,16 +446,24 @@ export default function ObsidianCore({
       );
 
       renderer.setSize(width, height, false);
+
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
     };
 
     const observer = new ResizeObserver(resize);
+
     observer.observe(container);
     resize();
 
+    // ----------------------------------------
+    // ANIMATION LOOP
+    // ----------------------------------------
+
     const clock = new THREE.Clock();
+
     let frameId = 0;
+    let lastElapsed = 0;
 
     sculpture.rotation.set(
       -0.22,
@@ -350,41 +474,130 @@ export default function ObsidianCore({
     const animate = () => {
       frameId = requestAnimationFrame(animate);
 
-      if (document.hidden) return;
+      if (document.hidden) {
+        lastElapsed = 0;
+        return;
+      }
 
-      const delta = Math.min(
-        clock.getDelta(),
-        0.05
+      const elapsed = clock.getElapsedTime();
+
+      const delta = lastElapsed
+        ? Math.min(elapsed - lastElapsed, 0.05)
+        : 0.016;
+
+      lastElapsed = elapsed;
+
+      const enabled =
+        activeRef.current && !reducedMotion;
+
+      const sharedPointer =
+        pointerRef?.current ?? localPointer;
+
+      const pointerEnabled =
+        enabled &&
+        !coarsePointer &&
+        sharedPointer.inside;
+
+      pointer.targetX = pointerEnabled
+        ? (sharedPointer.x - 0.5) * 2
+        : 0;
+
+      pointer.targetY = pointerEnabled
+        ? (sharedPointer.y - 0.5) * 2
+        : 0;
+
+      // Framerate-independent damping.
+      const damping =
+        1 - Math.exp(-4.5 * delta);
+
+      pointer.x = THREE.MathUtils.lerp(
+        pointer.x,
+        pointer.targetX,
+        damping
       );
 
-      const elapsed = clock.elapsedTime;
+      pointer.y = THREE.MathUtils.lerp(
+        pointer.y,
+        pointer.targetY,
+        damping
+      );
 
-      if (activeRef.current && !reducedMotion) {
-        sculpture.rotation.y += delta * 0.11;
+      if (enabled) {
+        // Natural idle rotation is preserved.
+        rotatingCore.rotation.y += delta * 0.11;
 
-        sculpture.rotation.x = THREE.MathUtils.lerp(
-          sculpture.rotation.x,
-          -0.22 + pointer.y * 0.16,
-          0.025
-        );
+        // The entire sculpture responds to the
+        // cursor without snapping or jerking.
+        sculpture.rotation.x =
+          THREE.MathUtils.lerp(
+            sculpture.rotation.x,
+            -0.22 + pointer.y * 0.27,
+            damping
+          );
 
-        sculpture.rotation.z = THREE.MathUtils.lerp(
-          sculpture.rotation.z,
-          -0.12 - pointer.x * 0.12,
-          0.025
-        );
+        sculpture.rotation.y =
+          THREE.MathUtils.lerp(
+            sculpture.rotation.y,
+            0.35 + pointer.x * 0.34,
+            damping
+          );
+
+        sculpture.rotation.z =
+          THREE.MathUtils.lerp(
+            sculpture.rotation.z,
+            -0.12 - pointer.x * 0.13,
+            damping
+          );
 
         sculpture.position.y =
           Math.sin(elapsed * 0.55) * 0.13;
 
-        halo.rotation.z += delta * 0.045;
-        secondHalo.rotation.z -= delta * 0.035;
+        // Rings rotate independently.
+        orbits[0].ring.rotation.z +=
+          delta * 0.06;
 
-        particles.rotation.y += delta * 0.006;
+        orbits[1].ring.rotation.z -=
+          delta * 0.045;
+
+        orbits[2].ring.rotation.z +=
+          delta * 0.035;
+
+        // Particles orbit the sculpture.
+        orbits[0].particlePivot.rotation.z +=
+          delta * 0.24;
+
+        orbits[1].particlePivot.rotation.z -=
+          delta * 0.19;
+
+        orbits[2].particlePivot.rotation.z +=
+          delta * 0.14;
+
+        particles.rotation.y +=
+          delta * 0.006;
+
+        // Crimson lighting follows the pointer.
+        crimsonLight.position.x =
+          THREE.MathUtils.lerp(
+            crimsonLight.position.x,
+            3.2 + pointer.x * 3,
+            damping * 0.75
+          );
+
+        crimsonLight.position.y =
+          THREE.MathUtils.lerp(
+            crimsonLight.position.y,
+            -1.1 - pointer.y * 2.5,
+            damping * 0.75
+          );
 
         crimsonLight.intensity =
           100 +
-          Math.sin(elapsed * 1.2) * 13;
+          Math.sin(elapsed * 1.2) * 13 +
+          Math.abs(pointer.x) * 15;
+
+        rimLight.intensity =
+          65 +
+          Math.sin(elapsed * 0.7) * 8;
       }
 
       renderer.render(scene, camera);
@@ -392,8 +605,13 @@ export default function ObsidianCore({
 
     animate();
 
+    // ----------------------------------------
+    // CLEANUP
+    // ----------------------------------------
+
     return () => {
       cancelAnimationFrame(frameId);
+
       observer.disconnect();
 
       container.removeEventListener(
@@ -408,24 +626,34 @@ export default function ObsidianCore({
 
       outerGeometry.dispose();
       obsidianMaterial.dispose();
+
       innerGeometry.dispose();
       innerMaterial.dispose();
+
       edgeGeometry.dispose();
       edgeMaterial.dispose();
-      haloGeometry.dispose();
-      haloMaterial.dispose();
-      secondHalo.geometry.dispose();
-      (secondHalo.material as THREE.Material).dispose();
+
       particlesGeometry.dispose();
       particlesMaterial.dispose();
 
+      for (const orbit of orbits) {
+        orbit.geometry.dispose();
+        orbit.material.dispose();
+        orbit.particleGeometry.dispose();
+        orbit.particleMaterial.dispose();
+      }
+
       renderer.dispose();
 
-      if (renderer.domElement.parentNode === container) {
-        container.removeChild(renderer.domElement);
+      if (
+        renderer.domElement.parentNode === container
+      ) {
+        container.removeChild(
+          renderer.domElement
+        );
       }
     };
-  }, []);
+  }, [pointerRef]);
 
   return (
     <div

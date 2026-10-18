@@ -91,7 +91,11 @@
 }
 
 .arsenal-animated-word-crimson {
+  position: relative;
   color: #ff304f;
+  cursor: default;
+  isolation: isolate;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .arsenal-letter {
@@ -100,14 +104,58 @@
   transform-origin: center bottom;
   will-change: transform, opacity;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
+
+/* ==========================================
+   CRIMSON MAGNETIC LETTER INTERACTION
+========================================== */
+
+.arsenal-animated-word-crimson .arsenal-letter {
+  color: #ff304f;
+  transform-origin: 50% 85%;
+  transform-style: preserve-3d;
+  cursor: default;
+}
+
+/* Soft ambient glow only while interacting. */
+
+.arsenal-animated-word-crimson::before {
+  content: "";
+  position: absolute;
+  inset: 8% -4%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 48, 79, 0.16),
+    transparent 72%
+  );
+  filter: blur(25px);
+  transition: opacity 0.4s ease;
+}
+
+.arsenal-animated-word-crimson:hover::before {
+  opacity: 1;
+}
+
+.arsenal-animated-word-crimson:hover .arsenal-letter {
+  color: #ff3c5c;
+}
+
+/* Ensure the magnetic letters can move above
+   their original positions without being clipped. */
 
 .arsenal-title-red {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   padding-right: 0.08em;
   padding-bottom: 0.09em;
 }
+
+/* Existing entrance sweep is preserved. */
 
 .arsenal-title-sweep {
   position: absolute;
@@ -337,6 +385,10 @@
   }
 }
 
+/* ==========================================
+   REDUCED MOTION
+========================================== */
+
 @media (prefers-reduced-motion: reduce) {
   .skills-section .arsenal-card {
     transform: none !important;
@@ -347,6 +399,11 @@
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
+    will-change: auto;
+  }
+
+  .arsenal-animated-word-crimson::before {
+    display: none;
   }
 
   .arsenal-title-sweep,

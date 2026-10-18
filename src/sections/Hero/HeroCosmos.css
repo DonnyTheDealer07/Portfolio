@@ -1,0 +1,383 @@
+
+/* ============================================
+   SECTION 01 — OBSIDIAN COSMOS
+   Pure black / Crimson #ff304f
+============================================ */
+
+.hero.hero-obsidian.hero-refined.hero-cosmos {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #000 !important;
+  background-color: #000 !important;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+}
+
+/* ============================================
+   FULL-SCREEN CRIMSON STARFIELD
+============================================ */
+
+.hero-cosmos .hero-cosmos-starfield {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: transparent;
+  opacity: 1;
+}
+
+/* ============================================
+   SEAMLESS 3D CANVAS
+============================================ */
+
+.hero-cosmos .hero-obsidian-stage {
+  z-index: 2;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.hero-cosmos .obsidian-core {
+  background: transparent !important;
+  background-color: transparent !important;
+  isolation: auto;
+  overflow: visible;
+}
+
+.hero-cosmos .obsidian-core canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.hero-cosmos .obsidian-core::after {
+  display: none !important;
+}
+
+.hero-cosmos .obsidian-core::before {
+  z-index: -1;
+  inset: 10%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 48, 79, 0.1) 0%,
+    rgba(255, 48, 79, 0.04) 35%,
+    transparent 72%
+  );
+  filter: blur(45px);
+}
+
+/* ============================================
+   ATMOSPHERE
+============================================ */
+
+.hero-cosmos .hero-glow {
+  z-index: 1;
+  background: radial-gradient(
+    ellipse 38% 48% at 75% 48%,
+    rgba(255, 48, 79, 0.055) 0%,
+    transparent 78%
+  ) !important;
+  pointer-events: none;
+}
+
+.hero-cosmos .hero-spotlight {
+  z-index: 1;
+  opacity: 0.6;
+  background: radial-gradient(
+    380px circle at var(--mouse-x) var(--mouse-y),
+    rgba(255, 48, 79, 0.045),
+    transparent 75%
+  ) !important;
+  pointer-events: none;
+}
+
+.hero-cosmos .hero-ambient-lines {
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-cosmos .hero-obsidian-vignette {
+  z-index: 3;
+  background: transparent !important;
+  background-image: none !important;
+  pointer-events: none;
+}
+
+.hero-cosmos .hero-reveal-veil {
+  z-index: 5;
+  background: #000 !important;
+  background-image: none !important;
+  pointer-events: none;
+}
+
+/* ============================================
+   HERO CONTENT
+============================================ */
+
+.hero-cosmos .hero-content {
+  position: relative;
+  z-index: 6;
+}
+
+.hero-cosmos .hero-content a {
+  position: relative;
+  z-index: 7;
+}
+
+.hero-cosmos .hero-side-label {
+  z-index: 6;
+}
+
+.hero-cosmos .hero-title,
+.hero-cosmos .hero-identity,
+.hero-cosmos .hero-description,
+.hero-cosmos .hero-ctas,
+.hero-cosmos .hero-bottom {
+  background-color: transparent;
+}
+
+/* ============================================
+   CRIMSON ANIMATED TYPOGRAPHY
+============================================ */
+
+.hero-cosmos .hero-crimson-word {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  color: #ff304f;
+  white-space: nowrap;
+  vertical-align: baseline;
+  isolation: isolate;
+  overflow: visible;
+  perspective: 800px;
+  cursor: default;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Letters remain in a single line and inherit
+   the original heading font, size and weight. */
+
+.hero-cosmos .hero-crimson-letters {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
+  color: #ff304f;
+}
+
+.hero-cosmos .hero-crimson-letter-wrap {
+  display: inline-block;
+  position: relative;
+  overflow: visible;
+  vertical-align: baseline;
+}
+
+.hero-cosmos .hero-crimson-letter {
+  display: inline-block;
+  position: relative;
+  color: #ff304f;
+  transform-style: preserve-3d;
+  transform-origin: 50% 100%;
+  will-change: transform, filter, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Subtle idle crimson shimmer.
+   Only begins after the entrance animation. */
+
+.hero-cosmos .hero-crimson-word:hover
+.hero-crimson-letter {
+  color: #ff3b5b;
+}
+
+/* Light sweep travels across the whole word. */
+
+.hero-cosmos .hero-crimson-sweep {
+  position: absolute;
+  z-index: 3;
+  top: -8%;
+  bottom: -8%;
+  left: -18%;
+  width: 32%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-130%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 48, 79, 0.05) 15%,
+    rgba(255, 126, 148, 0.22) 45%,
+    rgba(255, 205, 214, 0.35) 50%,
+    rgba(255, 48, 79, 0.12) 70%,
+    transparent 100%
+  );
+  filter: blur(8px);
+  mix-blend-mode: screen;
+}
+
+/* Ambient light underneath the crimson word. */
+
+.hero-cosmos .hero-crimson-word::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 18% 5%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 48, 79, 0.15),
+    transparent 72%
+  );
+  filter: blur(24px);
+  opacity: 0;
+  pointer-events: none;
+  animation: hero-crimson-breathe 7s ease-in-out
+    3.2s infinite;
+}
+
+@keyframes hero-crimson-breathe {
+  0%,
+  100% {
+    opacity: 0.16;
+    transform: scaleX(0.9);
+  }
+
+  50% {
+    opacity: 0.48;
+    transform: scaleX(1.05);
+  }
+}
+
+/* Optional tiny highlight across the text.
+   Kept subtle so the word stays legible. */
+
+.hero-cosmos .hero-crimson-letters::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.07) 46%,
+    transparent 64%
+  );
+  background-size: 240% 100%;
+  background-position: 100% 0;
+  mix-blend-mode: screen;
+  animation: hero-crimson-idle-shimmer
+    9s ease-in-out 4s infinite;
+}
+
+@keyframes hero-crimson-idle-shimmer {
+  0%,
+  70%,
+  100% {
+    opacity: 0;
+    background-position: 100% 0;
+  }
+
+  76% {
+    opacity: 0.65;
+  }
+
+  88% {
+    opacity: 0;
+    background-position: -100% 0;
+  }
+}
+
+/* ============================================
+   RESPONSIVE TYPOGRAPHY
+============================================ */
+
+@media (max-width: 1100px) {
+  .hero-cosmos .hero-crimson-letter {
+    will-change: auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-cosmos .hero-cosmos-starfield {
+    opacity: 0.8;
+  }
+
+  .hero-cosmos .hero-glow {
+    opacity: 0.55;
+  }
+
+  .hero-cosmos .hero-spotlight {
+    opacity: 0.35;
+  }
+
+  .hero-cosmos .hero-obsidian-stage {
+    overflow: visible;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-cosmos .hero-cosmos-starfield {
+    opacity: 0.65;
+  }
+
+  .hero-cosmos .hero-glow {
+    opacity: 0.35;
+  }
+
+  .hero-cosmos .hero-spotlight {
+    display: none;
+  }
+
+  .hero-cosmos .hero-crimson-word {
+    perspective: 500px;
+  }
+
+  .hero-cosmos .hero-crimson-sweep {
+    filter: blur(4px);
+  }
+
+  .hero-cosmos .hero-crimson-word::after {
+    filter: blur(14px);
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-cosmos .hero-cosmos-starfield {
+    opacity: 0.65;
+  }
+
+  .hero-cosmos .hero-spotlight {
+    display: none;
+  }
+
+  .hero-cosmos .hero-crimson-letter {
+    will-change: auto;
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+  }
+
+  .hero-cosmos .hero-crimson-word::after,
+  .hero-cosmos .hero-crimson-letters::after {
+    animation: none !important;
+  }
+
+  .hero-cosmos .hero-crimson-sweep {
+    display: none;
+  }
+}

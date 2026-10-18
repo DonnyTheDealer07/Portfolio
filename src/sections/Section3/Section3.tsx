@@ -45,8 +45,173 @@ function AnimatedWord({
   text: string;
   crimson?: boolean;
 }) {
+  const wordRef = useRef<HTMLSpanElement>(null);
+  const activatedRef = useRef(false);
+  const pointerFrameRef = useRef<number | null>(null);
+  const pointerRef = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const word = wordRef.current;
+    if (!word || !crimson) return;
+
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    );
+
+    const letters = Array.from(
+      word.querySelectorAll<HTMLElement>(".arsenal-letter")
+    );
+
+    const updateLetters = () => {
+      pointerFrameRef.current = null;
+
+      if (!activatedRef.current || reducedMotion.matches) {
+        return;
+      }
+
+      const { x, y } = pointerRef.current;
+
+      letters.forEach((letter) => {
+        const bounds = letter.getBoundingClientRect();
+
+        // Use the element's original position rather than
+        // its already-transformed position to avoid jitter.
+        const currentX = Number(
+          gsap.getProperty(letter, "x")
+        ) || 0;
+
+        const currentY = Number(
+          gsap.getProperty(letter, "y")
+        ) || 0;
+
+        const centerX =
+          bounds.left + bounds.width / 2 - currentX;
+
+        const centerY =
+          bounds.top + bounds.height / 2 - currentY;
+
+        const distance = Math.hypot(
+          x - centerX,
+          y - centerY
+        );
+
+        const influence = Math.max(
+          0,
+          1 - distance / 155
+        );
+
+        const direction =
+          Math.max(-1, Math.min(1, (x - centerX) / 155));
+
+        gsap.to(letter, {
+          x: direction * influence * 7,
+          y: -influence * 13,
+          rotation: -direction * influence * 4,
+          scaleX: 1 + influence * 0.055,
+          scaleY: 1 + influence * 0.085,
+          textShadow:
+            influence > 0.04
+              ? `0 0 ${Math.round(
+                  influence * 30
+                )}px rgba(255,48,79,${
+                  influence * 0.75
+                })`
+              : "0 0 0px rgba(255,48,79,0)",
+          duration: 0.32,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      });
+    };
+
+    const onMove = (event: PointerEvent) => {
+      if (
+        event.pointerType === "touch" ||
+        reducedMotion.matches ||
+        !activatedRef.current
+      ) {
+        return;
+      }
+
+      pointerRef.current.x = event.clientX;
+      pointerRef.current.y = event.clientY;
+
+      if (pointerFrameRef.current === null) {
+        pointerFrameRef.current =
+          requestAnimationFrame(updateLetters);
+      }
+    };
+
+    const reset = () => {
+      if (pointerFrameRef.current !== null) {
+        cancelAnimationFrame(pointerFrameRef.current);
+        pointerFrameRef.current = null;
+      }
+
+      gsap.to(letters, {
+        x: 0,
+        y: 0,
+        rotation: 0,
+        scaleX: 1,
+        scaleY: 1,
+        textShadow: "0 0 0px rgba(255,48,79,0)",
+        duration: 0.75,
+        stagger: 0.025,
+        ease: "elastic.out(1, 0.6)",
+        overwrite: "auto",
+      });
+    };
+
+    // The existing GSAP scroll entrance is allowed to
+    // finish before magnetic mouse interaction begins.
+    const observer = new MutationObserver(() => {
+      const visible = letters.every((letter) => {
+        const opacity = Number(
+          gsap.getProperty(letter, "opacity")
+        );
+        return opacity > 0.98;
+      });
+
+      if (visible) {
+        activatedRef.current = true;
+        observer.disconnect();
+      }
+    });
+
+    // ScrollTrigger controls the actual entrance.
+    // This activation check is scheduled after it.
+    const activationTrigger = ScrollTrigger.create({
+      trigger: word,
+      start: "top 85%",
+      once: true,
+      onEnter: () => {
+        gsap.delayedCall(1.5, () => {
+          activatedRef.current = true;
+        });
+      },
+    });
+
+    word.addEventListener("pointermove", onMove);
+    word.addEventListener("pointerleave", reset);
+
+    return () => {
+      activationTrigger.kill();
+      observer.disconnect();
+
+      if (pointerFrameRef.current !== null) {
+        cancelAnimationFrame(pointerFrameRef.current);
+      }
+
+      word.removeEventListener("pointermove", onMove);
+      word.removeEventListener("pointerleave", reset);
+
+      gsap.killTweensOf(letters);
+    };
+  }, [crimson]);
+
   return (
     <span
+      ref={wordRef}
       className={`arsenal-animated-word ${
         crimson ? "arsenal-animated-word-crimson" : ""
       }`}
@@ -80,9 +245,15 @@ function TechCore() {
 
     const context = gsap.context(() => {
       const shell = core.querySelector(".tech-core-shell");
-      const rings = gsap.utils.toArray<HTMLElement>(".tech-core-ring");
-      const dots = gsap.utils.toArray<HTMLElement>(".tech-core-dot");
-      const labels = gsap.utils.toArray<HTMLElement>(".tech-core-label");
+      const rings = gsap.utils.toArray<HTMLElement>(
+        ".tech-core-ring"
+      );
+      const dots = gsap.utils.toArray<HTMLElement>(
+        ".tech-core-dot"
+      );
+      const labels = gsap.utils.toArray<HTMLElement>(
+        ".tech-core-label"
+      );
       const center = core.querySelector(".tech-core-center");
       const aura = core.querySelector(".tech-core-aura");
 
@@ -438,10 +609,12 @@ export default function Section3() {
             duration: 1.75,
             ease: "none",
             onUpdate: () => {
-              setActivatedCount(Math.min(
-                technologies.length,
-                Math.floor(count.value)
-              ));
+              setActivatedCount(
+                Math.min(
+                  technologies.length,
+                  Math.floor(count.value)
+                )
+              );
             },
           },
           0

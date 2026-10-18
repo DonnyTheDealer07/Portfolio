@@ -1,0 +1,682 @@
+
+/*
+ * CORNÉ CARELSE — RESPONSIVE SYSTEM
+ * Obsidian & Crimson
+ *
+ * Supports:
+ * - Mobile phones
+ * - Tablets
+ * - Laptops and MacBooks
+ * - Desktop and ultrawide displays
+ * - Touch devices
+ * - Reduced motion
+ * - iOS safe areas
+ */
+
+/* ----------------------------------------
+   GLOBAL DEVICE FOUNDATION
+---------------------------------------- */
+
+:root {
+  --device-gutter: clamp(20px, 5vw, 88px);
+  --device-content-width: 1600px;
+  --device-safe-top: env(safe-area-inset-top, 0px);
+  --device-safe-right: env(safe-area-inset-right, 0px);
+  --device-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --device-safe-left: env(safe-area-inset-left, 0px);
+}
+
+html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: 90px;
+}
+
+body {
+  width: 100%;
+  max-width: 100%;
+  min-width: 320px;
+  overflow-x: clip;
+  overscroll-behavior-x: none;
+}
+
+#root,
+.portfolio {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 100%;
+}
+
+#root {
+  isolation: isolate;
+}
+
+img,
+video,
+picture,
+canvas {
+  max-width: 100%;
+}
+
+img,
+video {
+  height: auto;
+}
+
+svg {
+  flex-shrink: 0;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  touch-action: manipulation;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #ff304f;
+  outline-offset: 4px;
+}
+
+:where(
+  .hero,
+  .about-experience,
+  .skills-section,
+  .work-section,
+  .journey-section,
+  .s6-section,
+  .certificate-vault
+) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+:where(
+  .hero,
+  .about-experience,
+  .skills-section,
+  .work-section,
+  .journey-section,
+  .s6-section
+) img {
+  max-width: 100%;
+}
+
+/* Prevent grid and flex text overflow. */
+
+:where(
+  .hero-content,
+  .about-person-content,
+  .about-content-inner,
+  .about-chapter-main,
+  .arsenal-intro-copy,
+  .work-project-copy,
+  .journey-milestone-content,
+  .s6-copy,
+  .vault-heading-copy
+) {
+  min-width: 0;
+}
+
+:where(
+  .hero-description,
+  .about-copy-block,
+  .about-chapter-description,
+  .work-project-description,
+  .journey-intro-description,
+  .s6-copy
+) {
+  overflow-wrap: break-word;
+}
+
+/* ----------------------------------------
+   LAPTOP / MACBOOK
+   1025px - 1440px
+---------------------------------------- */
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+  :root {
+    --device-gutter: clamp(32px, 4vw, 64px);
+  }
+
+  .hero-refined .hero-title {
+    font-size: clamp(64px, 7.1vw, 112px);
+  }
+
+  .hero-refined .hero-content {
+    max-width: min(100%, 820px);
+  }
+
+  .work-section-heading,
+  .journey-heading,
+  .s6-hero-heading {
+    max-width: 100%;
+  }
+
+  .site-header {
+    padding-left: var(--device-gutter);
+    padding-right: var(--device-gutter);
+  }
+}
+
+/* ----------------------------------------
+   TABLETS / SMALL LAPTOPS
+   Up to 1024px
+---------------------------------------- */
+
+@media (max-width: 1024px) {
+  :root {
+    --device-gutter: clamp(24px, 5vw, 48px);
+  }
+
+  .site-header {
+    padding-left: var(--device-gutter);
+    padding-right: var(--device-gutter);
+  }
+
+  .hero-refined .hero-title {
+    font-size: clamp(58px, 8vw, 96px);
+  }
+
+  .hero-refined .hero-content {
+    max-width: 100%;
+  }
+
+  .hero-refined .hero-description {
+    max-width: 580px;
+  }
+
+  .vault-grid {
+    max-width: 100%;
+  }
+
+  .work-project-layout {
+    min-width: 0;
+  }
+
+  .s6-main-layout {
+    min-width: 0;
+  }
+}
+
+/* ----------------------------------------
+   MOBILE / PORTRAIT TABLETS
+   Up to 768px
+---------------------------------------- */
+
+@media (max-width: 768px) {
+  :root {
+    --device-gutter: 24px;
+  }
+
+  html {
+    scroll-padding-top: 72px;
+  }
+
+  .site-header {
+    height: 76px;
+    padding-left: max(
+      var(--device-gutter),
+      var(--device-safe-left)
+    );
+    padding-right: max(
+      var(--device-gutter),
+      var(--device-safe-right)
+    );
+    padding-top: var(--device-safe-top);
+  }
+
+  /* Hero */
+
+  .hero.hero-obsidian.hero-refined {
+    min-height: 100svh;
+  }
+
+  .hero-refined .hero-content {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .hero-refined .hero-title {
+    font-size: clamp(45px, 9vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.055em;
+  }
+
+  .hero-refined .hero-description {
+    max-width: 520px;
+    font-size: clamp(14px, 2vw, 17px);
+    line-height: 1.75;
+  }
+
+  .hero-refined .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-refined .hero-primary,
+  .hero-refined .hero-secondary {
+    min-height: 48px;
+    justify-content: center;
+  }
+
+  .hero-refined .hero-identity {
+    max-width: 100%;
+  }
+
+  .hero-refined .hero-bottom {
+    max-width: 100%;
+  }
+
+  /* Section 2 */
+
+  .about-experience {
+    max-width: 100%;
+  }
+
+  .about-track {
+    max-width: 100%;
+  }
+
+  .about-panel {
+    max-width: 100%;
+  }
+
+  .about-big-title {
+    font-size: clamp(42px, 9vw, 76px);
+  }
+
+  .about-chapter-title,
+  .about-vision-title {
+    font-size: clamp(36px, 7.5vw, 66px);
+  }
+
+  .about-person-image,
+  .about-portrait-image {
+    max-width: 100%;
+  }
+
+  /* Section 3 */
+
+  .skills-section {
+    max-width: 100%;
+  }
+
+  .arsenal-intro {
+    max-width: 100%;
+  }
+
+  .tech-core {
+    max-width: 100%;
+  }
+
+  .tech-core-shell {
+    max-width: min(100%, 480px);
+    margin-inline: auto;
+  }
+
+  .arsenal-grid {
+    max-width: 100%;
+  }
+
+  .arsenal-kinetic-title {
+    max-width: 100%;
+  }
+
+  .vault-grid {
+    max-width: 100%;
+  }
+
+  /* Section 4 */
+
+  .work-section {
+    max-width: 100%;
+  }
+
+  .work-section-heading {
+    font-size: clamp(42px, 8.5vw, 78px);
+  }
+
+  .work-project-layout {
+    max-width: 100%;
+  }
+
+  .work-project-title {
+    font-size: clamp(36px, 7vw, 68px);
+  }
+
+  .work-project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+
+  /* Section 5 */
+
+  .journey-section {
+    max-width: 100%;
+  }
+
+  .journey-heading {
+    font-size: clamp(42px, 8vw, 76px);
+  }
+
+  .journey-timeline {
+    max-width: 100%;
+  }
+
+  .journey-milestone {
+    max-width: 100%;
+  }
+
+  .journey-milestone-content {
+    max-width: 100%;
+  }
+
+  /* Section 6 */
+
+  .s6-section {
+    max-width: 100%;
+  }
+
+  .s6-main {
+    max-width: 100%;
+  }
+
+  .s6-main-layout {
+    max-width: 100%;
+  }
+
+  .s6-hero-heading {
+    font-size: clamp(42px, 9vw, 82px);
+  }
+
+  /* Mobile menu */
+
+  .cinematic-menu-toggle {
+    max-width: calc(100vw - 32px);
+  }
+
+  .cinematic-menu-overlay {
+    max-width: 100%;
+  }
+
+  .cinematic-menu-panel {
+    max-width: 100%;
+  }
+}
+
+/* ----------------------------------------
+   PHONES
+   Up to 480px
+---------------------------------------- */
+
+@media (max-width: 480px) {
+  :root {
+    --device-gutter: 20px;
+  }
+
+  .site-header {
+    height: 68px;
+  }
+
+  .hero.hero-obsidian.hero-refined {
+    min-height: 100svh;
+  }
+
+  .hero-refined .hero-title {
+    font-size: clamp(39px, 10vw, 52px);
+    line-height: 1.04;
+    letter-spacing: -0.055em;
+  }
+
+  .hero-refined .hero-description {
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 100%;
+  }
+
+  .hero-refined .hero-ctas {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .hero-refined .hero-primary,
+  .hero-refined .hero-secondary {
+    min-height: 48px;
+    padding-inline: 18px;
+    font-size: 12px;
+  }
+
+  .hero-refined .hero-identity {
+    max-width: 100%;
+  }
+
+  .hero-refined .hero-bottom {
+    max-width: 100%;
+  }
+
+  .about-big-title {
+    font-size: clamp(36px, 9vw, 48px);
+  }
+
+  .about-chapter-title,
+  .about-vision-title {
+    font-size: clamp(34px, 8vw, 46px);
+  }
+
+  .work-section-heading,
+  .journey-heading {
+    font-size: clamp(38px, 9vw, 52px);
+  }
+
+  .work-project-title {
+    font-size: clamp(34px, 8vw, 48px);
+  }
+
+  .s6-hero-heading {
+    font-size: clamp(38px, 9vw, 56px);
+  }
+
+  .vault-title {
+    font-size: clamp(32px, 8vw, 48px);
+  }
+
+  .cinematic-menu-toggle {
+    min-height: 44px;
+  }
+}
+
+/* ----------------------------------------
+   VERY SMALL PHONES
+   320px - 375px
+---------------------------------------- */
+
+@media (max-width: 375px) {
+  :root {
+    --device-gutter: 16px;
+  }
+
+  .hero-refined .hero-title {
+    font-size: clamp(34px, 9.5vw, 42px);
+  }
+
+  .hero-refined .hero-description {
+    font-size: 13px;
+  }
+
+  .hero-refined .hero-ctas {
+    gap: 10px;
+  }
+
+  .hero-refined .hero-primary,
+  .hero-refined .hero-secondary {
+    font-size: 11px;
+    padding-inline: 14px;
+  }
+
+  .about-big-title,
+  .work-section-heading,
+  .journey-heading,
+  .s6-hero-heading {
+    font-size: clamp(32px, 9vw, 40px);
+  }
+}
+
+/* ----------------------------------------
+   LANDSCAPE PHONES
+---------------------------------------- */
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero.hero-obsidian.hero-refined {
+    min-height: 620px;
+  }
+
+  .hero-refined .hero-title {
+    font-size: clamp(42px, 6vw, 72px);
+  }
+
+  .site-header {
+    height: 64px;
+  }
+
+  .hero-refined .hero-bottom {
+    position: relative;
+  }
+}
+
+/* ----------------------------------------
+   LARGE / ULTRAWIDE DESKTOPS
+---------------------------------------- */
+
+@media (min-width: 1920px) {
+  .hero-refined .hero-content {
+    max-width: 1200px;
+  }
+
+  .hero-refined .hero-title {
+    font-size: clamp(110px, 7vw, 165px);
+  }
+
+  .site-header {
+    padding-inline: max(
+      6%,
+      calc((100vw - 1800px) / 2)
+    );
+  }
+}
+
+/* ----------------------------------------
+   TOUCH DEVICES
+---------------------------------------- */
+
+@media (hover: none) and (pointer: coarse) {
+  button,
+  a,
+  [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button,
+  [role="button"] {
+    touch-action: manipulation;
+  }
+
+  .cinematic-menu-toggle {
+    min-height: 44px;
+  }
+
+  .hero-refined .hero-primary,
+  .hero-refined .hero-secondary {
+    min-height: 48px;
+  }
+
+  /* Prevent hover-only visual states
+     from becoming permanently stuck. */
+
+  .work-project,
+  .vault-card,
+  .arsenal-card {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ----------------------------------------
+   iOS / SAFARI SAFE AREAS
+---------------------------------------- */
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .site-header {
+    padding-left: max(
+      var(--device-gutter),
+      env(safe-area-inset-left)
+    );
+    padding-right: max(
+      var(--device-gutter),
+      env(safe-area-inset-right)
+    );
+  }
+
+  .cinematic-menu-overlay {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ----------------------------------------
+   ACCESSIBILITY
+---------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ----------------------------------------
+   HIGH CONTRAST
+---------------------------------------- */
+
+@media (prefers-contrast: more) {
+  :root {
+    --muted: #d8cbd0;
+  }
+
+  button:focus-visible,
+  a:focus-visible {
+    outline-width: 3px;
+  }
+}

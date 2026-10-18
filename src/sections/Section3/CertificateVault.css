@@ -68,6 +68,62 @@
   color: #ff304f;
 }
 
+/* ==========================================
+   MAGNETIC CRIMSON TYPOGRAPHY
+========================================== */
+
+.vault-magnetic-word {
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+  white-space: nowrap;
+  color: #ff304f;
+  isolation: isolate;
+  cursor: default;
+  perspective: 900px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.vault-magnetic-word::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 10% -4%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 48, 79, 0.18),
+    transparent 72%
+  );
+  filter: blur(25px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.vault-magnetic-word:hover::before {
+  opacity: 1;
+}
+
+.vault-magnetic-letter {
+  position: relative;
+  display: inline-block;
+  color: #ff304f;
+  transform-origin: 50% 85%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform;
+}
+
+.vault-magnetic-word:hover .vault-magnetic-letter {
+  color: #ff3c5c;
+}
+
+/* ==========================================
+   HEADING DETAILS
+========================================== */
+
 .vault-description {
   max-width: 600px;
   margin: 35px 0 0;
@@ -656,5 +712,16 @@
   .vault-modal-image {
     animation: none !important;
     transition: none !important;
+  }
+
+  .vault-magnetic-letter {
+    transform: none !important;
+    filter: none !important;
+    text-shadow: none !important;
+    will-change: auto;
+  }
+
+  .vault-magnetic-word::before {
+    display: none;
   }
 }

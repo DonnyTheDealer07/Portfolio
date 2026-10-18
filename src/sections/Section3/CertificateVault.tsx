@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
 } from "react";
+import type { PointerEvent as ReactPointerEvent } from "react";
 import { createPortal } from "react-dom";
 import {
   ArrowLeft,
@@ -36,6 +37,143 @@ const certificates: Certificate[] = [
   { id: 5, image: "/certificates/cv5.jpeg", label: "Certificate 05" },
   { id: 6, image: "/certificates/cv6.jpeg", label: "Certificate 06" },
 ];
+
+const VERIFIED = "VERIFIED.";
+
+function MagneticVerified() {
+  const wordRef = useRef<HTMLElement>(null);
+  const frameRef = useRef<number | null>(null);
+  const pointerRef = useRef({ x: 0, y: 0 });
+
+  const handleMove = (event: ReactPointerEvent<HTMLElement>) => {
+    if (
+      event.pointerType === "touch" ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    pointerRef.current = {
+      x: event.clientX,
+      y: event.clientY,
+    };
+
+    if (frameRef.current !== null) return;
+
+    frameRef.current = requestAnimationFrame(() => {
+      frameRef.current = null;
+
+      const word = wordRef.current;
+      if (!word) return;
+
+      const letters = word.querySelectorAll<HTMLElement>(
+        ".vault-magnetic-letter"
+      );
+
+      letters.forEach((letter) => {
+        const rect = letter.getBoundingClientRect();
+
+        const currentX =
+          Number(gsap.getProperty(letter, "x")) || 0;
+        const currentY =
+          Number(gsap.getProperty(letter, "y")) || 0;
+
+        const centerX = rect.left + rect.width / 2 - currentX;
+        const centerY = rect.top + rect.height / 2 - currentY;
+
+        const distance = Math.hypot(
+          pointerRef.current.x - centerX,
+          pointerRef.current.y - centerY
+        );
+
+        const influence = Math.max(0, 1 - distance / 155);
+        const direction = Math.max(
+          -1,
+          Math.min(
+            1,
+            (pointerRef.current.x - centerX) / 155
+          )
+        );
+
+        gsap.to(letter, {
+          x: direction * influence * 7,
+          y: -influence * 13,
+          rotation: -direction * influence * 4,
+          scaleX: 1 + influence * 0.055,
+          scaleY: 1 + influence * 0.085,
+          textShadow:
+            influence > 0.04
+              ? `0 0 ${Math.round(influence * 30)}px rgba(255,48,79,${influence * 0.75})`
+              : "0 0 0px rgba(255,48,79,0)",
+          duration: 0.32,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      });
+    });
+  };
+
+  const reset = () => {
+    if (frameRef.current !== null) {
+      cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+    }
+
+    const letters = wordRef.current?.querySelectorAll(
+      ".vault-magnetic-letter"
+    );
+
+    if (!letters) return;
+
+    gsap.to(letters, {
+      x: 0,
+      y: 0,
+      rotation: 0,
+      scaleX: 1,
+      scaleY: 1,
+      textShadow: "0 0 0px rgba(255,48,79,0)",
+      duration: 0.75,
+      stagger: 0.025,
+      ease: "elastic.out(1, 0.6)",
+      overwrite: "auto",
+    });
+  };
+
+  useEffect(() => {
+    const word = wordRef.current;
+    return () => {
+      if (frameRef.current !== null) {
+        cancelAnimationFrame(frameRef.current);
+      }
+
+      if (word) {
+        gsap.killTweensOf(
+          word.querySelectorAll(".vault-magnetic-letter")
+        );
+      }
+    };
+  }, []);
+
+  return (
+    <em
+      ref={wordRef}
+      className="vault-magnetic-word"
+      aria-label={VERIFIED}
+      onPointerMove={handleMove}
+      onPointerLeave={reset}
+    >
+      {Array.from(VERIFIED).map((letter, index) => (
+        <span
+          className="vault-magnetic-letter"
+          aria-hidden="true"
+          key={`${letter}-${index}`}
+        >
+          {letter}
+        </span>
+      ))}
+    </em>
+  );
+}
 
 export default function CertificateVault() {
   const vaultRef = useRef<HTMLDivElement>(null);
@@ -351,7 +489,7 @@ export default function CertificateVault() {
           <h3 className="vault-title">
             KNOWLEDGE.
             <br />
-            <em>VERIFIED.</em>
+            <MagneticVerified />
           </h3>
 
           <p className="vault-description">
