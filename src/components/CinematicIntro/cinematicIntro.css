@@ -1,0 +1,368 @@
+
+.cinematic-intro {
+  --intro-flash: 0;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+  perspective: 1200px;
+  background: #0a0a0d;
+  color: #f7f2f3;
+}
+
+.intro-static-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse at 48% 55%,
+      rgba(115, 12, 35, 0.3),
+      transparent 65%
+    ),
+    #0a0a0d;
+}
+
+.intro-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.08;
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.035) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.035) 1px,
+      transparent 1px
+    );
+  background-size: 75px 75px;
+  mask-image: radial-gradient(
+    ellipse at center,
+    black 5%,
+    transparent 75%
+  );
+}
+
+.intro-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 30%,
+    rgba(0, 0, 0, 0.18) 70%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+}
+
+.intro-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  background: #ff304f;
+  opacity: var(--intro-flash);
+  pointer-events: none;
+}
+
+.intro-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.intro-particles canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.intro-content {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0 24px;
+  text-align: center;
+  transform-style: preserve-3d;
+}
+
+.intro-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 30px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  color: #ff304f;
+}
+
+.intro-eyebrow-line {
+  width: 36px;
+  height: 1px;
+  background: #a81932;
+}
+
+.intro-name {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  margin: 0;
+  font-family: "Arial Black", Arial, sans-serif;
+  font-size: clamp(28px, 7.3vw, 112px);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.065em;
+  white-space: nowrap;
+  color: #fff1f2;
+  transform-style: preserve-3d;
+}
+
+.cinematic-intro .intro-name .intro-name-white,
+.cinematic-intro .intro-name .intro-name-crimson {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  white-space: nowrap;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+.cinematic-intro .intro-name .intro-name-white {
+  position: relative;
+  color: #fff1f2;
+}
+
+.cinematic-intro .intro-name .intro-name-crimson {
+  --takeover: 0%;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  color: #ff304f;
+  -webkit-text-fill-color: #ff304f;
+  transform: none;
+  transform-origin: center center;
+  clip-path: inset(
+    0 calc(100% - var(--takeover)) 0 0
+  );
+  pointer-events: none;
+  text-shadow:
+    0 0 12px rgba(255, 48, 79, 0.3),
+    0 0 28px rgba(255, 48, 79, 0.15);
+}
+
+.cinematic-intro .intro-name .intro-letter {
+  position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  white-space: pre;
+}
+
+.intro-letter-white {
+  will-change: transform, opacity, filter;
+}
+
+.cinematic-intro .intro-name .intro-letter-crimson {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  will-change: auto;
+}
+
+.intro-subtitle {
+  display: flex;
+  justify-content: center;
+  margin: 25px 0 0;
+  font-size: clamp(10px, 1.25vw, 16px);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: #ff5263;
+}
+
+.intro-subtitle-letter {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+
+.intro-skip {
+  position: absolute;
+  z-index: 10;
+  top: 38px;
+  right: 48px;
+  padding: 10px 0;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: #a99ba0;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  cursor: pointer;
+  transition:
+    color 0.25s,
+    border-color 0.25s;
+}
+
+.intro-skip:hover {
+  color: #ff304f;
+  border-color: #ff304f;
+}
+
+.intro-skip span {
+  margin-left: 10px;
+  font-size: 15px;
+}
+
+.intro-bottom {
+  position: absolute;
+  z-index: 6;
+  bottom: 35px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  color: #75676e;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+}
+
+.intro-bottom-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #ff304f;
+  box-shadow: 0 0 12px #ff304f;
+}
+
+.cinematic-intro.is-reduced {
+  perspective: none;
+}
+
+.is-reduced .intro-letter-white,
+.is-reduced .intro-subtitle-letter {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  will-change: auto;
+}
+
+.cinematic-intro.is-reduced .intro-name-crimson {
+  display: none;
+}
+
+.intro-accessible-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  margin-top: 42px;
+}
+
+.intro-accessible-actions p {
+  max-width: 440px;
+  margin: 0;
+  color: #a99ba0;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.intro-continue {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  min-height: 52px;
+  padding: 0 28px;
+  border: 1px solid #ff304f;
+  background: #ff304f;
+  color: #fff;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.intro-continue:hover {
+  background: transparent;
+  color: #ff304f;
+}
+
+.intro-continue:focus-visible,
+.intro-skip:focus-visible {
+  outline: 2px solid #f7f2f3;
+  outline-offset: 5px;
+}
+
+@media (max-width: 768px) {
+  .intro-name {
+    font-size: clamp(23px, 7.2vw, 55px);
+    letter-spacing: -0.07em;
+  }
+
+  .intro-eyebrow {
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    margin-bottom: 24px;
+  }
+
+  .intro-eyebrow-line {
+    width: 22px;
+  }
+
+  .intro-subtitle {
+    margin-top: 18px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  .intro-skip {
+    top: 22px;
+    right: 24px;
+  }
+
+  .intro-bottom {
+    bottom: 25px;
+    font-size: 7px;
+    gap: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  .intro-accessible-actions {
+    margin-top: 32px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-continue,
+  .intro-skip {
+    transition: none;
+  }
+}

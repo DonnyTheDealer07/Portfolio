@@ -1,0 +1,72 @@
+
+.crimson-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  overflow: hidden;
+  pointer-events: all;
+  isolation: isolate;
+}
+
+.transition-top,
+.transition-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: #08090b;
+  will-change: transform;
+}
+
+.transition-top {
+  top: 0;
+  border-bottom: 1px solid rgba(255, 48, 79, 0.3);
+}
+
+.transition-bottom {
+  bottom: 0;
+  border-top: 1px solid rgba(255, 48, 79, 0.3);
+}
+
+.transition-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px;
+  border-radius: 50%;
+  background: #ff304f;
+  box-shadow: 0 0 22px 8px rgba(255, 48, 79, 0.65);
+  z-index: 3;
+  opacity: 0;
+}
+
+.transition-line {
+  position: absolute;
+  top: calc(50% - 1px);
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: scaleX(0);
+  background: #ff304f;
+  box-shadow:
+    0 0 15px 3px rgba(255, 48, 79, 0.85),
+    0 0 45px 9px rgba(255, 48, 79, 0.4);
+  z-index: 2;
+  opacity: 0;
+  will-change: transform;
+}
+
+.transition-label {
+  position: absolute;
+  z-index: 3;
+  top: calc(50% + 25px);
+  left: 0;
+  right: 0;
+  text-align: center;
+  font: 600 10px "DM Sans", sans-serif;
+  letter-spacing: 0.35em;
+  color: #e6b8c0;
+  opacity: 0;
+}
