@@ -1,0 +1,148 @@
+/* =========================================
+   PROJECTS
+========================================= */
+
+.projects-section {
+  background:
+    radial-gradient(
+      ellipse at 70% 45%,
+      rgba(125, 15, 39, 0.1),
+      transparent 50%
+    ),
+    #0a0a0d;
+}
+
+.project-feature {
+  display: block;
+  margin-top: 60px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.3s;
+}
+
+.project-feature:hover {
+  border-color: rgba(255, 48, 79, 0.6);
+}
+
+.project-feature-art {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(310px, 45vw, 570px);
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 65% 40%,
+      rgba(196, 23, 59, 0.37),
+      transparent 35%
+    ),
+    linear-gradient(135deg, #231018, #0d0b10 65%);
+}
+
+.project-feature-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.3;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 3px,
+    rgba(255, 255, 255, 0.025) 4px
+  );
+  pointer-events: none;
+}
+
+.project-feature-art > strong {
+  font-size: clamp(75px, 15vw, 220px);
+  font-weight: 900;
+  letter-spacing: -0.1em;
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.project-feature-art > strong span {
+  color: #ff304f;
+}
+
+.project-feature:hover .project-feature-art > strong {
+  transform: scale(1.055);
+}
+
+.project-art-kicker,
+.project-art-bottom {
+  position: absolute;
+  left: 30px;
+  z-index: 1;
+  color: #bbaeb3;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+}
+
+.project-art-kicker {
+  top: 30px;
+}
+
+.project-art-bottom {
+  bottom: 30px;
+}
+
+.project-feature-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 32px;
+  background: #131115;
+}
+
+.project-meta {
+  color: #ff304f;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+}
+
+.project-feature-details h3 {
+  margin: 13px 0 9px;
+  font-size: 35px;
+  letter-spacing: -0.05em;
+}
+
+.project-feature-details p {
+  max-width: 550px;
+  margin: 0;
+  color: #aaa0a4;
+  line-height: 1.7;
+}
+
+.project-feature-arrow {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 57px;
+  height: 57px;
+  border: 1px solid rgba(255, 48, 79, 0.6);
+  border-radius: 50%;
+  color: #ff304f;
+  transition:
+    color 0.3s,
+    background 0.3s,
+    transform 0.3s;
+}
+
+.project-feature:hover .project-feature-arrow {
+  color: white;
+  background: #ff304f;
+  transform: rotate(45deg);
+}
+
+.project-disclaimer,
+.experience-note {
+  margin-top: 20px;
+  color: #81757b;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+

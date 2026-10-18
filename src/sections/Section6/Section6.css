@@ -1,0 +1,91 @@
+/* =========================================
+   CONTACT
+========================================= */
+
+.final-section {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      ellipse at 45% 80%,
+      rgba(151, 17, 46, 0.2),
+      transparent 55%
+    ),
+    #0a0a0d;
+}
+
+.final-section .section-display {
+  font-size: clamp(65px, 11vw, 180px);
+}
+
+.contact-big-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  width: fit-content;
+  min-width: min(100%, 400px);
+  margin: 15px 0 90px;
+  padding: 22px 0;
+  border-bottom: 2px solid #ff304f;
+  color: #f6f1f2;
+  font-size: clamp(24px, 4vw, 55px);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.contact-big-link:hover {
+  color: #ff304f;
+}
+
+.contact-big-link svg {
+  color: #ff304f;
+  transition: transform 0.3s;
+}
+
+.contact-big-link svg {
+  color: #ff304f;
+  transition: transform 0.3s;
+}
+
+.contact-big-link:hover svg {
+  transform: translate(5px, -5px);
+}
+
+.portfolio-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: auto;
+  padding-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  color: #877b81;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.portfolio-footer > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+.portfolio-footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #bbb1b5;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.portfolio-footer a:hover {
+  color: #ff304f;
+}
+
+

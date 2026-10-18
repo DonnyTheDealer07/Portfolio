@@ -1,0 +1,399 @@
+.portfolio-sections {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  background: #0a0a0d;
+  color: #f6f1f2;
+}
+
+.portfolio-section {
+  position: relative;
+  min-height: 80vh;
+  padding: 115px max(6vw, 24px);
+  overflow: hidden;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin-bottom: 80px;
+}
+
+.section-number {
+  flex-shrink: 0;
+  color: #ff304f;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.19em;
+}
+
+.section-rule {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.11);
+}
+
+.section-overline {
+  margin: 0 0 23px;
+  color: #a99ba0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+}
+
+.section-display {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: clamp(46px, 7.5vw, 122px);
+  line-height: 0.98;
+  font-weight: 900;
+  letter-spacing: -0.075em;
+}
+
+.section-display em {
+  color: #ff304f;
+  font-style: normal;
+}
+
+.section-intro {
+  max-width: 520px;
+  margin: 30px 0 50px;
+  color: #a99ba0;
+  font-size: clamp(15px, 1.35vw, 18px);
+  line-height: 1.8;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1200px) {
+  .about-big-title {
+    font-size: clamp(44px, 5.1vw, 75px);
+  }
+
+  .about-chapter-title {
+    font-size: clamp(52px, 6vw, 95px);
+  }
+
+  .about-chapter-grid {
+    gap: 4vw;
+  }
+
+  .about-code-body {
+    padding: 25px 15px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .skills-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .about-person-content {
+    padding-left: 3vw;
+    padding-right: 3vw;
+  }
+
+  .about-copy-block {
+    margin-top: 25px;
+  }
+
+  .about-copy-block p {
+    line-height: 1.65;
+  }
+
+  .about-scroll-hint {
+    margin-top: 28px;
+  }
+}
+
+/* MOBILE: NATIVE VERTICAL SCROLLING */
+
+@media (max-width: 768px) {
+  .about-experience {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .about-fixed-header {
+    position: relative;
+    height: 75px;
+    padding: 0 22px;
+    background: #0a0a0d;
+  }
+
+  .about-header-caption {
+    font-size: 8px;
+  }
+
+  .about-track {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .about-panel {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .about-panel-person {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .about-person-image {
+    height: 62svh;
+    min-height: 390px;
+  }
+
+  .about-portrait-image {
+    object-position: center 30%;
+  }
+
+  .about-image-label {
+    left: 25px;
+    bottom: 30px;
+  }
+
+  .about-image-coordinate {
+    right: 25px;
+    bottom: 30px;
+  }
+
+  .about-person-content {
+    padding: 75px 25px 100px;
+  }
+
+  .about-big-title {
+    font-size: clamp(46px, 11vw, 80px);
+  }
+
+  .about-copy-block {
+    margin-top: 35px;
+  }
+
+  .about-copy-block p {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .about-scroll-hint {
+    margin-top: 40px;
+  }
+
+  .about-panel-mindset,
+  .about-panel-craft,
+  .about-panel-vision {
+    padding: 100px 25px;
+  }
+
+  .about-chapter-grid {
+    grid-template-columns: 1fr;
+    gap: 55px;
+  }
+
+  .about-chapter-title {
+    font-size: clamp(48px, 11vw, 80px);
+  }
+
+  .about-chapter-description {
+    margin-top: 30px;
+    font-size: 16px;
+  }
+
+  .about-mindset-visual {
+    max-width: 400px;
+  }
+
+  .about-code-visual {
+    max-width: 100%;
+  }
+
+  .about-code-window {
+    transform: none;
+  }
+
+  .about-code-body {
+    font-size: clamp(9px, 2.5vw, 13px);
+    padding: 25px 12px;
+  }
+
+  .code-line-number {
+    width: 25px;
+  }
+
+  .about-panel-vision {
+    min-height: 85svh;
+  }
+
+  .about-vision-title {
+    font-size: clamp(58px, 12vw, 100px);
+  }
+
+  .about-vision-description {
+    font-size: 16px;
+  }
+
+  .about-vision-footer {
+    flex-wrap: wrap;
+    gap: 15px;
+    font-size: 9px;
+  }
+
+  .about-bottom-bar {
+    display: none;
+  }
+
+  .portfolio-section {
+    min-height: auto;
+    padding: 90px 22px;
+  }
+
+  .section-heading {
+    margin-bottom: 55px;
+  }
+
+  .section-display {
+    font-size: clamp(40px, 11vw, 70px);
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .skill-tile {
+    min-height: 135px;
+    padding: 16px;
+  }
+
+  .project-feature-details {
+    padding: 22px;
+  }
+
+  .project-feature-details h3 {
+    font-size: 28px;
+  }
+
+  .project-feature-art {
+    min-height: 290px;
+  }
+
+  .project-art-kicker,
+  .project-art-bottom {
+    left: 18px;
+    font-size: 8px;
+  }
+
+  .experience-item {
+    grid-template-columns: 1fr 25px;
+    gap: 15px;
+  }
+
+  .experience-item > span {
+    grid-column: 1 / -1;
+  }
+
+  .final-section .section-display {
+    font-size: clamp(55px, 13vw, 90px);
+  }
+
+  .portfolio-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 420px) {
+  .about-person-image {
+    height: 55svh;
+  }
+
+  .about-big-title {
+    font-size: 11vw;
+  }
+
+  .about-chapter-title {
+    font-size: 10.5vw;
+  }
+
+  .about-vision-title {
+    font-size: 11.5vw;
+  }
+
+  .about-capability-list span {
+    font-size: 9px;
+  }
+
+  .about-code-topbar {
+    padding: 0 12px;
+  }
+
+  .about-quote {
+    font-size: 15px;
+  }
+}
+
+/* ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+  .about-experience {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .about-fixed-header {
+    position: relative;
+  }
+
+  .about-track {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform: none !important;
+  }
+
+  .about-panel {
+    width: 100%;
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .about-panel-person {
+    min-height: 100svh;
+  }
+
+  .about-bottom-bar {
+    display: none;
+  }
+
+  .mindset-orbit,
+  .about-scroll-hint svg {
+    animation: none !important;
+  }
+
+  .about-code-window {
+    transform: none;
+    transition: none;
+  }
+
+  .project-feature,
+  .project-feature-art > strong,
+  .project-feature-arrow,
+  .skill-tile,
+  .skill-tile svg {
+    transition: none;
+  }
+}
+

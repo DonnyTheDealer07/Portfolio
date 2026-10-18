@@ -1,0 +1,58 @@
+
+.about-atmosphere {
+  position: absolute;
+  inset: 0;
+  display: block;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.92;
+}
+
+.about-panel-mindset .about-chapter-grid,
+.about-panel-vision .about-vision-content {
+  position: relative;
+  z-index: 2;
+}
+
+.about-panel-mindset .about-mindset-visual {
+  z-index: 2;
+}
+
+.about-panel-vision {
+  padding-top: max(135px, 15vh);
+  padding-bottom: max(165px, 19vh);
+}
+
+.about-panel-vision .about-vision-title {
+  font-size: clamp(65px, 9.5vw, 175px);
+}
+
+.about-panel-vision .about-vision-footer {
+  margin-top: clamp(30px, 4vh, 55px);
+  margin-bottom: 40px;
+}
+
+.about-panel-vision .about-vision-description {
+  margin-top: clamp(25px, 4vh, 45px);
+}
+
+@media (max-height: 850px) and (min-width: 769px) {
+  .about-panel-vision .about-vision-title {
+    font-size: clamp(60px, 8.2vw, 140px);
+  }
+
+  .about-panel-vision .about-vision-description {
+    font-size: 16px;
+    line-height: 1.55;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-panel-vision {
+    padding: 110px 25px 145px;
+  }
+
+  .about-panel-vision .about-vision-title {
+    font-size: clamp(54px, 11vw, 100px);
+  }
+}

@@ -1,0 +1,147 @@
+
+.crimson-type {
+  position: relative;
+  display: inline-block;
+  vertical-align: baseline;
+  max-width: 100%;
+  color: #ff304f;
+  font: inherit;
+  font-style: normal;
+  line-height: inherit;
+  isolation: isolate;
+}
+
+.crimson-letters {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
+}
+
+.crimson-letter-shell {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+  line-height: inherit;
+}
+
+.crimson-letter {
+  display: inline-block;
+  position: relative;
+  transform-origin: 50% 80%;
+  will-change: transform;
+  color: #ff304f;
+  cursor: default;
+}
+
+/* DIGITAL GLITCH */
+
+.crimson-glitch-ghost {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  color: #ff304f;
+  opacity: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  font: inherit;
+  line-height: inherit;
+}
+
+.crimson-glitch-ghost-a {
+  text-shadow: -3px 0 #ff304f;
+}
+
+.crimson-glitch-ghost-b {
+  text-shadow: 3px 0 #ff8094;
+}
+
+/* FOCUS REVEAL */
+
+.crimson-focus {
+  filter: none;
+}
+
+/* EVOLVING LIGHT SWEEP */
+
+.crimson-wave {
+  overflow: hidden;
+}
+
+.crimson-light-sweep {
+  position: absolute;
+  z-index: 3;
+  top: -15%;
+  bottom: -15%;
+  left: -40%;
+  width: 25%;
+  opacity: 0;
+  pointer-events: none;
+  transform: skewX(-22deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.12) 25%,
+    rgba(255, 255, 255, 0.65) 50%,
+    rgba(255, 255, 255, 0.12) 75%,
+    transparent
+  );
+  filter: blur(9px);
+  mix-blend-mode: screen;
+}
+
+/* OPTIONAL SUBTLE IDLE GLOW */
+
+.crimson-type.is-finished {
+  text-shadow: 0 0 0 transparent;
+}
+
+/* KEEP TYPOGRAPHY FROM CREATING OVERFLOW */
+
+.about-panel {
+  isolation: isolate;
+}
+
+.about-big-title .crimson-type,
+.about-chapter-title .crimson-type,
+.about-vision-title .crimson-type {
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+}
+
+/* HIDE THE UNWANTED PAGE HORIZONTAL SCROLLBAR */
+
+html,
+body,
+#root {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.about-experience {
+  overflow: hidden;
+}
+
+.about-track {
+  scrollbar-width: none;
+}
+
+.about-track::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crimson-letter {
+    will-change: auto;
+    transform: none !important;
+    text-shadow: none !important;
+  }
+
+  .crimson-glitch-ghost,
+  .crimson-light-sweep {
+    display: none;
+  }
+}

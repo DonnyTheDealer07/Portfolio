@@ -1,0 +1,47 @@
+/* =========================================
+   EXPERIENCE
+========================================= */
+
+.experience-section {
+  background: #101014;
+}
+
+.experience-list {
+  margin-top: 70px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.experience-item {
+  display: grid;
+  grid-template-columns: 190px 1fr 30px;
+  align-items: start;
+  gap: 30px;
+  padding: 35px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.experience-item > span {
+  padding-top: 8px;
+  color: #ff304f;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.experience-item h3 {
+  margin: 0 0 12px;
+  font-size: clamp(24px, 3vw, 40px);
+  letter-spacing: -0.05em;
+}
+
+.experience-item p {
+  max-width: 580px;
+  margin: 0;
+  color: #a99ba0;
+  line-height: 1.8;
+}
+
+.experience-item > svg {
+  color: #ff304f;
+}
+
+
