@@ -1,0 +1,357 @@
+
+/* ==========================================
+   SECTION 03 — OBSIDIAN BLACK
+   CINEMATIC SYSTEM INITIALIZATION
+========================================== */
+
+.skills-section {
+  background: #000 !important;
+  background-color: #000 !important;
+  color: #f7f2f4;
+}
+
+.skills-section::before,
+.skills-section::after {
+  background: none !important;
+}
+
+.skills-section .arsenal-intro,
+.skills-section .arsenal-intro-copy,
+.skills-section .tech-core {
+  background: transparent !important;
+}
+
+/* ==========================================
+   COMPACT INTRO LAYOUT
+========================================== */
+
+.skills-section .arsenal-intro {
+  min-height: 340px;
+  margin-top: -12px;
+  margin-bottom: 12px;
+  gap: 2vw;
+  align-items: center;
+}
+
+.skills-section .tech-core {
+  min-height: 350px;
+}
+
+.skills-section .tech-core-shell {
+  width: min(335px, 78%);
+}
+
+.skills-section .tech-core-aura {
+  background: radial-gradient(
+    circle,
+    rgba(255, 48, 79, 0.19) 0%,
+    rgba(255, 48, 79, 0.06) 35%,
+    transparent 68%
+  ) !important;
+}
+
+.skills-section .arsenal-intro .section-display {
+  font-size: clamp(58px, 7vw, 122px);
+  line-height: 0.93;
+}
+
+.skills-section .arsenal-intro .section-intro {
+  margin-top: 24px;
+}
+
+.skills-section .arsenal-capabilities {
+  margin-top: 22px;
+}
+
+/* ==========================================
+   KINETIC HEADLINE
+========================================== */
+
+.arsenal-kinetic-title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  overflow: visible;
+  perspective: 900px;
+}
+
+.arsenal-title-line {
+  position: relative;
+  display: block;
+  max-width: 100%;
+  white-space: nowrap;
+  line-height: 0.98;
+}
+
+.arsenal-animated-word {
+  display: inline-flex;
+  white-space: nowrap;
+  color: #f7f2f4;
+}
+
+.arsenal-animated-word-crimson {
+  color: #ff304f;
+}
+
+.arsenal-letter {
+  display: inline-block;
+  position: relative;
+  transform-origin: center bottom;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.arsenal-title-red {
+  position: relative;
+  overflow: hidden;
+  padding-right: 0.08em;
+  padding-bottom: 0.09em;
+}
+
+.arsenal-title-sweep {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 26%;
+  opacity: 0;
+  pointer-events: none;
+  transform: skewX(-22deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.26),
+    transparent
+  );
+  filter: blur(12px);
+  mix-blend-mode: screen;
+}
+
+/* ==========================================
+   ACTIVE TECHNOLOGIES
+========================================== */
+
+.skills-section .arsenal-grid-heading {
+  margin-top: 0;
+  margin-bottom: 14px;
+}
+
+.arsenal-live-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-variant-numeric: tabular-nums;
+}
+
+.arsenal-live-counter strong {
+  color: #ff304f;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.arsenal-live-counter > span {
+  color: #a89ca1;
+}
+
+.skills-section .arsenal-grid {
+  position: relative;
+  background: rgba(255, 255, 255, 0.13);
+  gap: 1px;
+}
+
+.skills-section .arsenal-card {
+  position: relative;
+  min-height: 165px;
+  padding: 22px;
+  background: #000 !important;
+  isolation: isolate;
+}
+
+.skills-section .arsenal-card:hover {
+  background: #0b0306 !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 48, 79, 0.5),
+    0 0 35px rgba(255, 48, 79, 0.09);
+}
+
+.arsenal-card-scan {
+  position: absolute;
+  z-index: 2;
+  inset: 0 0 auto;
+  height: 38%;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 48, 79, 0.035) 45%,
+    rgba(255, 48, 79, 0.18) 95%,
+    rgba(255, 48, 79, 0.6) 100%
+  );
+}
+
+.arsenal-card-activation {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  background: rgba(255, 48, 79, 0.08);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 48, 79, 0.8),
+    inset 0 0 38px rgba(255, 48, 79, 0.12);
+}
+
+/* ==========================================
+   CREDENTIALS VAULT SPACING
+========================================== */
+
+.skills-section .certificate-vault {
+  margin-top: 75px;
+  padding-bottom: 20px;
+  background: #000 !important;
+}
+
+.skills-section .vault-divider {
+  margin-bottom: 55px;
+}
+
+.skills-section .vault-heading {
+  margin-bottom: 42px;
+  background: transparent !important;
+}
+
+.skills-section .vault-grid {
+  background: transparent !important;
+}
+
+.skills-section .vault-card,
+.skills-section .vault-card-image,
+.skills-section .vault-card-details {
+  background: #000 !important;
+}
+
+.skills-section .vault-card:hover {
+  border-color: rgba(255, 48, 79, 0.65);
+  box-shadow: 0 0 35px rgba(255, 48, 79, 0.08);
+}
+
+.vault-modal {
+  background: #000 !important;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 1100px) {
+  .skills-section .arsenal-intro {
+    min-height: 320px;
+    margin-top: 0;
+    margin-bottom: 16px;
+  }
+
+  .skills-section .tech-core {
+    min-height: 330px;
+  }
+
+  .skills-section .tech-core-shell {
+    width: min(305px, 77%);
+  }
+
+  .skills-section .arsenal-card {
+    min-height: 150px;
+    padding: 18px;
+  }
+
+  .skills-section .certificate-vault {
+    margin-top: 65px;
+  }
+}
+
+@media (max-width: 768px) {
+  .skills-section .arsenal-intro {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    gap: 0;
+    margin-top: 0;
+    margin-bottom: 18px;
+  }
+
+  .skills-section .arsenal-intro .section-display {
+    font-size: clamp(52px, 10vw, 90px);
+  }
+
+  .skills-section .tech-core {
+    min-height: 300px;
+  }
+
+  .skills-section .tech-core-shell {
+    width: min(280px, 74%);
+  }
+
+  .skills-section .arsenal-grid-heading {
+    margin-bottom: 12px;
+  }
+
+  .skills-section .arsenal-card {
+    min-height: 130px;
+    padding: 16px;
+  }
+
+  .skills-section .certificate-vault {
+    margin-top: 60px;
+  }
+
+  .skills-section .vault-divider {
+    margin-bottom: 40px;
+  }
+
+  .skills-section .vault-heading {
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 430px) {
+  .skills-section .tech-core {
+    min-height: 270px;
+  }
+
+  .skills-section .tech-core-shell {
+    width: 72%;
+  }
+
+  .skills-section .arsenal-intro .section-display {
+    font-size: clamp(48px, 11vw, 70px);
+  }
+
+  .skills-section .arsenal-card {
+    min-height: 120px;
+    padding: 13px;
+  }
+
+  .arsenal-live-counter strong {
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skills-section .arsenal-card {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .arsenal-letter {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .arsenal-title-sweep,
+  .arsenal-card-scan,
+  .arsenal-card-activation {
+    display: none !important;
+  }
+}
