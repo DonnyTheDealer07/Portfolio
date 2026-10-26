@@ -1,9 +1,18 @@
+
 import { useEffect, useRef } from "react";
-import { ArrowRight, ArrowUpRight, MoveRight, Code2, Layers3, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  MoveRight,
+  Code2,
+  Layers3,
+  Sparkles,
+} from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import CrimsonTypography from "./CrimsonTypography";
 import AboutAtmosphere from "./AboutAtmosphere";
+import CyberPortrait from "./CyberPortrait";
 import "./Section2.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -285,20 +294,57 @@ export default function Section2() {
         const distance = () =>
           Math.max(0, track.scrollWidth - window.innerWidth);
 
-        const horizontal = gsap.to(track, {
-          x: () => -distance(),
-          ease: "none",
+        // Keep the opening portrait stationary first.
+        // This uses scroll distance, not a timer.
+        const holdDistance = () =>
+          window.innerHeight * 0.95;
+
+        const totalDistance = () =>
+          holdDistance() + distance();
+
+        const horizontal = gsap.timeline({
+          defaults: { ease: "none" },
           scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: () => `+=${distance()}`,
+            end: () =>
+              `+=${Math.max(1, totalDistance())}`,
             pin: true,
             scrub: 1.1,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            onUpdate: (self) =>
-              updateProgress(self.progress),
+            onUpdate: (self) => {
+              const hold = holdDistance();
+              const travel = distance();
+              const travelled =
+                self.progress * (hold + travel);
+
+              const chapterProgress =
+                travel > 0
+                  ? Math.max(
+                      0,
+                      Math.min(
+                        1,
+                        (travelled - hold) / travel
+                      )
+                    )
+                  : 0;
+
+              updateProgress(chapterProgress);
+            },
           },
+        });
+
+        // PHASE 1: Portrait stays in place.
+        horizontal.to(track, {
+          x: 0,
+          duration: holdDistance,
+        });
+
+        // PHASE 2: Horizontal About journey.
+        horizontal.to(track, {
+          x: () => -distance(),
+          duration: distance,
         });
 
         panels.forEach((panel, index) => {
@@ -315,27 +361,6 @@ export default function Section2() {
             });
           }
         });
-
-        const portrait = section.querySelector(
-          ".about-portrait-image"
-        );
-
-        if (portrait) {
-          gsap.fromTo(
-            portrait,
-            { scale: 1.13 },
-            {
-              scale: 1,
-              ease: "none",
-              scrollTrigger: {
-                trigger: section,
-                start: "top bottom",
-                end: "top top",
-                scrub: true,
-              },
-            }
-          );
-        }
 
         return () => updateProgress(0);
       });
@@ -380,24 +405,7 @@ export default function Section2() {
         {/* PANEL 01 — THE PERSON */}
         <article className="about-panel about-panel-person">
           <div className="about-person-image">
-            <img
-              src="/Me.jpeg"
-              alt="Portrait of Corné Carelse"
-              className="about-portrait-image"
-              loading="eager"
-            />
-
-            <div className="about-image-shade" />
-
-            <div className="about-image-label">
-              <span>THE DEVELOPER</span>
-              <strong>CORNÉ CARELSE</strong>
-              <span>SOUTH AFRICA / 2026</span>
-            </div>
-
-            <span className="about-image-coordinate">
-              01 — 04
-            </span>
+            <CyberPortrait />
           </div>
 
           <div className="about-person-content">
@@ -751,5 +759,3 @@ export default function Section2() {
     </section>
   );
 }
-
-

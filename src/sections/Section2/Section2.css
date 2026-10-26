@@ -1,6 +1,7 @@
-/* =========================================
+
+/* ==========================================
    CINEMATIC HORIZONTAL ABOUT EXPERIENCE
-========================================= */
+========================================== */
 
 .about-experience {
   position: relative;
@@ -26,6 +27,7 @@
   gap: 30px;
   padding: 0 5vw;
   pointer-events: none;
+  background: transparent;
 }
 
 .about-section-index {
@@ -64,19 +66,21 @@
   overflow: hidden;
 }
 
-/* FIRST PANEL */
+/* ==========================================
+   FIRST PANEL — PURE BLACK
+========================================== */
 
 .about-panel-person {
   display: grid;
   grid-template-columns: 53% 47%;
-  background: #0a0a0d;
+  background: #000000;
 }
 
 .about-person-image {
   position: relative;
   height: 100%;
   overflow: hidden;
-  background: #151217;
+  background: #000000;
 }
 
 .about-portrait-image {
@@ -148,13 +152,7 @@
   align-items: center;
   min-width: 0;
   padding: 100px 5vw 100px 4vw;
-  background:
-    radial-gradient(
-      ellipse at 100% 50%,
-      rgba(155, 20, 45, 0.12),
-      transparent 65%
-    ),
-    #0a0a0d;
+  background: #000000;
 }
 
 .about-content-inner {
@@ -235,7 +233,9 @@
   }
 }
 
-/* SHARED CHAPTERS */
+/* ==========================================
+   SHARED CHAPTERS
+========================================== */
 
 .about-panel-mindset,
 .about-panel-craft,
@@ -320,7 +320,9 @@
   letter-spacing: -0.02em;
 }
 
-/* MINDSET ORBITS */
+/* ==========================================
+   MINDSET ORBITS
+========================================== */
 
 .about-mindset-visual {
   position: relative;
@@ -421,7 +423,9 @@
   }
 }
 
-/* CRAFT PANEL */
+/* ==========================================
+   CRAFT PANEL
+========================================== */
 
 .about-capability-list {
   max-width: 570px;
@@ -580,7 +584,9 @@
   pointer-events: none;
 }
 
-/* FINAL ABOUT PANEL */
+/* ==========================================
+   FINAL ABOUT PANEL
+========================================== */
 
 .about-panel-vision {
   justify-content: center;
@@ -657,7 +663,9 @@
   pointer-events: none;
 }
 
-/* PROGRESS */
+/* ==========================================
+   PROGRESS BAR — TRANSPARENT BACKGROUND
+========================================== */
 
 .about-bottom-bar {
   position: absolute;
@@ -666,6 +674,7 @@
   bottom: 35px;
   left: 5vw;
   pointer-events: none;
+  background: transparent;
 }
 
 .about-bottom-info {
@@ -696,5 +705,3 @@
   transform-origin: left center;
   will-change: transform;
 }
-
-

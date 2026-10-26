@@ -397,3 +397,70 @@
   }
 }
 
+/* ==========================================
+   REMOVE SECTION HEADER STRIPS — 01 TO 06
+   OBSIDIAN & CRIMSON PORTFOLIO
+========================================== */
+
+/* 01 — INTRODUCTION */
+.hero-identity-index,
+.hero-identity-rule {
+  display: none !important;
+}
+
+/* 02 — ABOUT */
+.about-experience > .about-fixed-header {
+  display: none !important;
+}
+
+/* 03 — EXPERTISE */
+.skills-section > .section-heading {
+  display: none !important;
+}
+
+/* 04 — SELECTED WORK */
+.work-section .work-section-topline {
+  display: none !important;
+}
+
+/* 05 — EXPERIENCE */
+.journey-section .journey-section-topline {
+  display: none !important;
+}
+
+/* 06 — CONTACT */
+.final-section > .section-heading,
+.contact-section > .section-heading {
+  display: none !important;
+}
+
+/* ==========================================
+   REMOVE EMPTY HEADER SPACING
+========================================== */
+
+.skills-section > .section-heading,
+.work-section .work-section-topline,
+.journey-section .journey-section-topline,
+.final-section > .section-heading,
+.contact-section > .section-heading {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 0 !important;
+}
+
+/* ==========================================
+   KEEP ABOUT PROGRESS BAR VISIBLE
+========================================== */
+
+.about-bottom-bar {
+  display: block;
+  background: transparent !important;
+}
+
+.about-progress-track {
+  background: rgba(255, 255, 255, 0.17);
+}
+
+.about-progress-fill {
+  background: #ff304f;
+}

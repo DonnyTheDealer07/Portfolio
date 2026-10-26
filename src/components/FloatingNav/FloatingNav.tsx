@@ -1,15 +1,17 @@
-
 import {
   useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
+
 import type {
   MouseEvent as ReactMouseEvent,
   FocusEvent as ReactFocusEvent,
 } from "react";
+
 import { useLocation, useNavigate } from "react-router-dom";
+
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -22,8 +24,13 @@ import {
   UserRound,
   X,
 } from "lucide-react";
+
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
 import "./FloatingNav.css";
+
+gsap.registerPlugin(ScrollTrigger);
 
 type Props = {
   hidden?: boolean;
@@ -156,6 +163,13 @@ export default function FloatingNav({
 
   const initializedRef = useRef(false);
   const previousOpenRef = useRef(false);
+  const openRef = useRef(false);
+  const navigatingRef = useRef(false);
+
+  const originalOverflowRef = useRef<{
+    body: string;
+    html: string;
+  } | null>(null);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -192,6 +206,58 @@ export default function FloatingNav({
     [updateTracker]
   );
 
+  // ==========================================
+  // SCROLL LOCK — FIXED
+  // ==========================================
+
+  const lockPageScroll = useCallback(() => {
+    if (originalOverflowRef.current) return;
+
+    originalOverflowRef.current = {
+      body: document.body.style.overflow,
+      html: document.documentElement.style.overflow,
+    };
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+  }, []);
+
+  const unlockPageScroll = useCallback(() => {
+    const previous = originalOverflowRef.current;
+
+    if (!previous) return;
+
+    document.body.style.overflow = previous.body;
+    document.documentElement.style.overflow = previous.html;
+
+    originalOverflowRef.current = null;
+  }, []);
+
+  // ==========================================
+  // MENU OPEN / CLOSE
+  // ==========================================
+
+  const closeMenu = useCallback(() => {
+    if (!openRef.current) return;
+
+    openRef.current = false;
+    setOpen(false);
+  }, []);
+
+  const toggleMenu = useCallback(() => {
+    if (openRef.current) {
+      closeMenu();
+      return;
+    }
+
+    openRef.current = true;
+    setOpen(true);
+  }, [closeMenu]);
+
+  // ==========================================
+  // SCROLL STATE
+  // ==========================================
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 65);
@@ -208,28 +274,23 @@ export default function FloatingNav({
     };
   }, []);
 
+  // ==========================================
+  // HIDDEN / ROUTE CHANGES
+  // ==========================================
+
   useEffect(() => {
     if (hidden) {
-      setOpen(false);
+      closeMenu();
     }
-  }, [hidden]);
+  }, [hidden, closeMenu]);
 
   useEffect(() => {
-    setOpen(false);
-  }, [location.pathname]);
+    closeMenu();
+  }, [location.pathname, closeMenu]);
 
-  /*
-   * CINEMATIC OPEN / FADE-OUT
-   *
-   * OPEN:
-   *   Two black panels slide into place.
-   *   Navigation items reveal in sequence.
-   *
-   * CLOSE:
-   *   Content fades first.
-   *   Entire overlay fades to transparent.
-   *   Underlying section remains unchanged.
-   */
+  // ==========================================
+  // CINEMATIC MENU ANIMATIONS
+  // ==========================================
 
   useEffect(() => {
     const overlay = overlayRef.current;
@@ -278,6 +339,12 @@ export default function FloatingNav({
         });
       }
 
+      if (open) {
+        lockPageScroll();
+      } else {
+        unlockPageScroll();
+      }
+
       initializedRef.current = true;
       previousOpenRef.current = open;
 
@@ -285,19 +352,25 @@ export default function FloatingNav({
     }
 
     if (open) {
+      lockPageScroll();
+
       gsap.set(overlay, {
         autoAlpha: 1,
         opacity: 1,
         pointerEvents: "auto",
       });
 
-      gsap.set(panels[0], {
-        xPercent: -105,
-      });
+      if (panels[0]) {
+        gsap.set(panels[0], {
+          xPercent: -105,
+        });
+      }
 
-      gsap.set(panels[1], {
-        xPercent: 105,
-      });
+      if (panels[1]) {
+        gsap.set(panels[1], {
+          xPercent: 105,
+        });
+      }
 
       gsap.set(links, {
         autoAlpha: 0,
@@ -316,14 +389,16 @@ export default function FloatingNav({
         });
       }
 
-      timelineRef.current = gsap
-        .timeline()
-        .to(panels, {
-          xPercent: 0,
-          duration: 0.8,
-          ease: "power4.inOut",
-        })
-        .to(
+      const timeline = gsap.timeline();
+
+      timeline.to(panels, {
+        xPercent: 0,
+        duration: 0.8,
+        ease: "power4.inOut",
+      });
+
+      if (background) {
+        timeline.to(
           background,
           {
             autoAlpha: 1,
@@ -331,30 +406,35 @@ export default function FloatingNav({
             ease: "power2.out",
           },
           "-=0.4"
-        )
-        .to(
-          links,
-          {
-            autoAlpha: 1,
-            y: 0,
-            rotateX: 0,
-            duration: 0.6,
-            stagger: 0.055,
-            ease: "power3.out",
-          },
-          "-=0.35"
-        )
-        .to(
-          reveals,
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.55,
-            stagger: 0.035,
-            ease: "power3.out",
-          },
-          "-=0.5"
         );
+      }
+
+      timeline.to(
+        links,
+        {
+          autoAlpha: 1,
+          y: 0,
+          rotateX: 0,
+          duration: 0.6,
+          stagger: 0.055,
+          ease: "power3.out",
+        },
+        "-=0.35"
+      );
+
+      timeline.to(
+        reveals,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.55,
+          stagger: 0.035,
+          ease: "power3.out",
+        },
+        "-=0.5"
+      );
+
+      timelineRef.current = timeline;
 
       initializedRef.current = true;
       previousOpenRef.current = true;
@@ -375,38 +455,38 @@ export default function FloatingNav({
     }
 
     if (!previousOpenRef.current) {
+      unlockPageScroll();
       return;
     }
 
-    /*
-     * CLOSE:
-     * Fade navigation and radar, then dissolve
-     * the whole overlay.
-     *
-     * No panel sliding on exit.
-     */
+    // Fade out, then restore scrolling.
+    // No delayed unlock timers on hover changes.
 
-    timelineRef.current = gsap
-      .timeline({
-        onComplete: () => {
-          gsap.set(overlay, {
-            autoAlpha: 0,
-            pointerEvents: "none",
-          });
-        },
-      })
-      .to(
-        [...links, ...reveals],
-        {
+    const timeline = gsap.timeline({
+      onComplete: () => {
+        gsap.set(overlay, {
           autoAlpha: 0,
-          y: -12,
-          duration: 0.25,
-          ease: "power2.inOut",
-          stagger: 0.008,
-        },
-        0
-      )
-      .to(
+          pointerEvents: "none",
+        });
+
+        unlockPageScroll();
+      },
+    });
+
+    timeline.to(
+      [...links, ...reveals],
+      {
+        autoAlpha: 0,
+        y: -12,
+        duration: 0.25,
+        ease: "power2.inOut",
+        stagger: 0.008,
+      },
+      0
+    );
+
+    if (background) {
+      timeline.to(
         background,
         {
           autoAlpha: 0,
@@ -414,46 +494,43 @@ export default function FloatingNav({
           ease: "power2.inOut",
         },
         0
-      )
-      .to(
-        overlay,
-        {
-          opacity: 0,
-          duration: EXIT_DURATION,
-          ease: "power2.inOut",
-        },
-        0
-      )
-      .set(overlay, {
-        autoAlpha: 0,
-        pointerEvents: "none",
-      });
+      );
+    }
+
+    timeline.to(
+      overlay,
+      {
+        opacity: 0,
+        duration: EXIT_DURATION,
+        ease: "power2.inOut",
+      },
+      0
+    );
+
+    timeline.set(overlay, {
+      autoAlpha: 0,
+      pointerEvents: "none",
+    });
+
+    timelineRef.current = timeline;
 
     previousOpenRef.current = false;
-  }, [open]);
 
-  /*
-   * LOCK BACKGROUND SCROLL WHILE MENU IS OPEN.
-   *
-   * When closing, wait for the fade to finish
-   * before restoring page scrolling.
-   */
+    return () => {
+      timeline.kill();
+    };
+  }, [open, lockPageScroll, unlockPageScroll]);
+
+  // ==========================================
+  // KEYBOARD ACCESSIBILITY
+  // ==========================================
 
   useEffect(() => {
     if (!open) return;
 
-    const previousBodyOverflow =
-      document.body.style.overflow;
-
-    const previousHtmlOverflow =
-      document.documentElement.style.overflow;
-
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
-
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setOpen(false);
+        closeMenu();
         return;
       }
 
@@ -468,10 +545,12 @@ export default function FloatingNav({
         toggle,
         ...Array.from(
           overlay.querySelectorAll<HTMLElement>(
-            'a[href]:not([tabindex="-1"]),button:not([disabled]):not([tabindex="-1"])'
+            'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"])'
           )
         ),
-      ].filter((element) => element.getClientRects().length > 0);
+      ].filter(
+        (element) => element.getClientRects().length > 0
+      );
 
       if (focusable.length === 0) return;
 
@@ -493,26 +572,13 @@ export default function FloatingNav({
       }
     };
 
-    document.addEventListener(
-      "keydown",
-      handleKeyDown
-    );
+    document.addEventListener("keydown", handleKeyDown);
 
     const focusTimer = window.setTimeout(() => {
       toggleRef.current?.focus({
         preventScroll: true,
       });
     }, prefersReducedMotion() ? 0 : 250);
-
-    const resizeObserver = new ResizeObserver(() => {
-      updateTracker(activeIndex);
-    });
-
-    if (navRef.current) {
-      resizeObserver.observe(navRef.current);
-    }
-
-    updateTracker(activeIndex);
 
     return () => {
       document.removeEventListener(
@@ -521,25 +587,34 @@ export default function FloatingNav({
       );
 
       window.clearTimeout(focusTimer);
-      resizeObserver.disconnect();
+    };
+  }, [open, closeMenu]);
 
-      const restoreDelay = prefersReducedMotion()
-        ? 0
-        : EXIT_DURATION * 1000;
+  // ==========================================
+  // TRACKER — SEPARATE FROM SCROLL LOCK
+  // ==========================================
 
-      window.setTimeout(() => {
-        document.body.style.overflow =
-          previousBodyOverflow;
+  useEffect(() => {
+    if (!open) return;
 
-        document.documentElement.style.overflow =
-          previousHtmlOverflow;
-      }, restoreDelay);
+    const observer = new ResizeObserver(() => {
+      updateTracker(activeIndex);
+    });
+
+    if (navRef.current) {
+      observer.observe(navRef.current);
+    }
+
+    updateTracker(activeIndex);
+
+    return () => {
+      observer.disconnect();
     };
   }, [open, activeIndex, updateTracker]);
 
-  /*
-   * PREVIEW TRANSITION
-   */
+  // ==========================================
+  // PREVIEW TRANSITION
+  // ==========================================
 
   useEffect(() => {
     if (!open || prefersReducedMotion()) return;
@@ -568,95 +643,108 @@ export default function FloatingNav({
     );
   }, [activeIndex, open]);
 
-  /*
-   * CLEANUP
-   */
-
-  useEffect(() => {
-    return () => {
-      timelineRef.current?.kill();
-
-      if (navigationTimerRef.current !== null) {
-        window.clearTimeout(
-          navigationTimerRef.current
-        );
-      }
-
-      if (replayTimerRef.current !== null) {
-        window.clearTimeout(
-          replayTimerRef.current
-        );
-      }
-    };
-  }, []);
-
-  /*
-   * NAVIGATION
-   */
+  // ==========================================
+  // NAVIGATION — FIXED
+  // ==========================================
 
   const navigateTo = (hash: string) => {
-    setOpen(false);
+    if (navigatingRef.current) return;
+
+    navigatingRef.current = true;
+
+    closeMenu();
 
     if (navigationTimerRef.current !== null) {
-      window.clearTimeout(
-        navigationTimerRef.current
-      );
+      window.clearTimeout(navigationTimerRef.current);
     }
 
     const delay = prefersReducedMotion()
       ? 0
-      : EXIT_DURATION * 1000 + 50;
+      : EXIT_DURATION * 1000 + 80;
 
-    navigationTimerRef.current = window.setTimeout(
-      () => {
-        if (location.pathname !== "/") {
-          navigate(`/#${hash}`);
-          return;
-        }
+    navigationTimerRef.current = window.setTimeout(() => {
+      navigationTimerRef.current = null;
 
-        const target = document.getElementById(hash);
+      // Ensure menu scroll lock is gone before navigating.
+      unlockPageScroll();
 
-        if (target) {
-          target.scrollIntoView({
-            behavior: prefersReducedMotion()
-              ? "instant"
-              : "smooth",
-            block: "start",
-          });
+      if (location.pathname !== "/") {
+        navigatingRef.current = false;
+        navigate(`/#${hash}`);
+        return;
+      }
 
-          window.history.replaceState(
-            window.history.state,
-            "",
-            `/#${hash}`
-          );
-        }
-      },
-      delay
-    );
+      // Refresh GSAP pin positions before calculating the target.
+      ScrollTrigger.refresh();
+
+      const target = document.getElementById(hash);
+
+      if (!target) {
+        navigatingRef.current = false;
+        return;
+      }
+
+      const targetY =
+        target.getBoundingClientRect().top +
+        window.scrollY;
+
+      // Direct scrolling avoids competing smooth-scroll
+      // animations across pinned horizontal sections.
+      window.scrollTo({
+        top: Math.max(0, targetY),
+        left: 0,
+        behavior: "instant",
+      });
+
+      window.history.replaceState(
+        window.history.state,
+        "",
+        `/#${hash}`
+      );
+
+      ScrollTrigger.update();
+
+      navigatingRef.current = false;
+    }, delay);
   };
+
+  // ==========================================
+  // REPLAY CINEMATIC INTRO
+  // ==========================================
 
   const replayIntro = () => {
-    if (!onReplay) return;
+    if (!onReplay || navigatingRef.current) return;
 
-    setOpen(false);
+    navigatingRef.current = true;
+
+    closeMenu();
 
     if (replayTimerRef.current !== null) {
-      window.clearTimeout(
-        replayTimerRef.current
-      );
+      window.clearTimeout(replayTimerRef.current);
     }
 
-    replayTimerRef.current = window.setTimeout(
-      onReplay,
-      prefersReducedMotion()
-        ? 0
-        : EXIT_DURATION * 1000 + 50
-    );
+    replayTimerRef.current = window.setTimeout(() => {
+      replayTimerRef.current = null;
+
+      unlockPageScroll();
+
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "instant",
+      });
+
+      ScrollTrigger.update();
+
+      navigatingRef.current = false;
+
+      onReplay();
+    }, prefersReducedMotion() ? 0 : EXIT_DURATION * 1000 + 80);
   };
 
-  /*
-   * MAGNETIC ARROWS
-   */
+  // ==========================================
+  // MAGNETIC ARROWS
+  // ==========================================
 
   const handleArrowMove = (
     event: ReactMouseEvent<HTMLAnchorElement>
@@ -721,6 +809,26 @@ export default function FloatingNav({
     }
   };
 
+  // ==========================================
+  // CLEANUP
+  // ==========================================
+
+  useEffect(() => {
+    return () => {
+      timelineRef.current?.kill();
+
+      if (navigationTimerRef.current !== null) {
+        window.clearTimeout(navigationTimerRef.current);
+      }
+
+      if (replayTimerRef.current !== null) {
+        window.clearTimeout(replayTimerRef.current);
+      }
+
+      unlockPageScroll();
+    };
+  }, [unlockPageScroll]);
+
   if (hidden) return null;
 
   return (
@@ -731,12 +839,10 @@ export default function FloatingNav({
         className={`cinematic-menu-toggle ${
           open ? "is-open" : ""
         } ${scrolled ? "is-scrolled" : ""}`}
-        aria-label={
-          open ? "Close menu" : "Open menu"
-        }
+        aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
         aria-controls="cinematic-menu-overlay"
-        onClick={() => setOpen((value) => !value)}
+        onClick={toggleMenu}
       >
         <span className="cinematic-menu-toggle-text">
           {open ? "CLOSE" : "MENU"}
@@ -760,15 +866,13 @@ export default function FloatingNav({
         id="cinematic-menu-overlay"
         className="cinematic-menu-overlay"
         role="dialog"
-        aria-modal={open ? "true" : undefined}
+        aria-modal={open ? true : undefined}
         aria-label="Portfolio navigation"
         aria-hidden={!open}
         inert={!open}
         style={{
           visibility: "hidden",
-          pointerEvents: open
-            ? "auto"
-            : "none",
+          pointerEvents: open ? "auto" : "none",
         }}
       >
         <div className="cinematic-menu-panel cinematic-menu-panel-left" />
@@ -819,9 +923,7 @@ export default function FloatingNav({
               >
                 <div
                   className={`cinematic-menu-tracker ${
-                    tracker.visible
-                      ? "is-visible"
-                      : ""
+                    tracker.visible ? "is-visible" : ""
                   }`}
                   style={{
                     top: tracker.top,
@@ -872,13 +974,8 @@ export default function FloatingNav({
 
             <aside className="cinematic-menu-right">
               <div className="cinematic-menu-preview-top cinematic-menu-reveal">
-                <span>
-                  MORE THAN A PORTFOLIO
-                </span>
-
-                <span>
-                  {activeItem.number} / 06
-                </span>
+                <span>MORE THAN A PORTFOLIO</span>
+                <span>{activeItem.number} / 06</span>
               </div>
 
               <div className="cinematic-menu-preview-stage">
@@ -907,9 +1004,7 @@ export default function FloatingNav({
                   <p className="cinematic-menu-preview-title">
                     {activeItem.headline}
                     <br />
-                    <span>
-                      {activeItem.accent}
-                    </span>
+                    <span>{activeItem.accent}</span>
                   </p>
 
                   <span className="cinematic-menu-side-caption">
@@ -922,7 +1017,8 @@ export default function FloatingNav({
                 <span
                   style={{
                     width: `${
-                      ((activeIndex + 1) / 6) *
+                      ((activeIndex + 1) /
+                        navigation.length) *
                       100
                     }%`,
                   }}
@@ -937,9 +1033,7 @@ export default function FloatingNav({
                 <button
                   type="button"
                   tabIndex={open ? 0 : -1}
-                  onClick={() =>
-                    navigateTo("work")
-                  }
+                  onClick={() => navigateTo("work")}
                 >
                   VIEW PROJECTS
                   <ArrowUpRight size={16} />
@@ -948,9 +1042,7 @@ export default function FloatingNav({
                 <button
                   type="button"
                   tabIndex={open ? 0 : -1}
-                  onClick={() =>
-                    navigateTo("contact")
-                  }
+                  onClick={() => navigateTo("contact")}
                 >
                   LET'S TALK
                   <ArrowUpRight size={16} />
@@ -974,19 +1066,14 @@ export default function FloatingNav({
 
           <footer className="cinematic-menu-footer cinematic-menu-reveal">
             <span>
-              © {new Date().getFullYear()} CORNÉ
-              CARELSE
+              © {new Date().getFullYear()} CORNÉ CARELSE
             </span>
 
             <span className="cinematic-menu-footer-middle">
-              SOUTH AFRICA / OPEN TO REMOTE
-              ROLES
+              SOUTH AFRICA / OPEN TO REMOTE ROLES
             </span>
 
-            <a
-              href="mailto:codingcorne@gmail.com"
-              tabIndex={open ? 0 : -1}
-            >
+            <a href="mailto:codingcorne@gmail.com">
               DISCUSS AN OPPORTUNITY
               <ArrowDownRight size={16} />
             </a>

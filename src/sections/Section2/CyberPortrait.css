@@ -1,0 +1,509 @@
+/* ==========================================
+   CYBER PORTRAIT — PURE BLACK EDITION
+========================================== */
+
+.cyber-portrait {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  overflow: hidden;
+  isolation: isolate;
+
+  background: #000000;
+
+  cursor: crosshair;
+  user-select: none;
+  touch-action: pan-y;
+
+  --reveal-x: 50%;
+  --reveal-y: 48%;
+  --eye-x: 58%;
+  --eye-y: 48%;
+  --reveal-radius: 155px;
+}
+
+/* PURE BLACK BACKGROUND */
+
+.cyber-portrait__background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: #000000;
+}
+
+/* PORTRAIT LAYERS */
+
+.cyber-portrait__image-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cyber-portrait__image {
+  position: absolute;
+  display: block;
+
+  left: 50%;
+  bottom: 0;
+
+  width: auto;
+  height: 88%;
+
+  max-width: none;
+  max-height: none;
+
+  object-fit: contain;
+  object-position: center bottom;
+
+  transform: translateX(-50%);
+
+  pointer-events: none;
+  user-select: none;
+}
+
+.cyber-portrait__human {
+  filter:
+    contrast(1.04)
+    saturate(0.88)
+    drop-shadow(0 15px 40px rgba(0, 0, 0, 0.45));
+}
+
+.cyber-portrait__machine {
+  filter:
+    contrast(1.08)
+    saturate(1.14)
+    drop-shadow(0 0 25px rgba(255, 59, 79, 0.25));
+}
+
+/* CYBERNETIC REVEAL */
+
+.cyber-portrait__reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+
+  pointer-events: none;
+  opacity: 0;
+
+  clip-path: circle(
+    var(--reveal-radius)
+    at var(--reveal-x) var(--reveal-y)
+  );
+
+  transition: opacity 0.32s ease;
+  will-change: clip-path, opacity;
+}
+
+.cyber-portrait--active .cyber-portrait__reveal {
+  opacity: 1;
+}
+
+.cyber-portrait--locked .cyber-portrait__reveal {
+  opacity: 1;
+  clip-path: circle(150% at 50% 50%);
+}
+
+.cyber-portrait__cyber-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background: linear-gradient(
+    90deg,
+    transparent 30%,
+    rgba(255, 59, 79, 0.035) 65%,
+    rgba(255, 59, 79, 0.1) 100%
+  );
+
+  mix-blend-mode: screen;
+}
+
+/* SCANNING BEAM */
+
+.cyber-portrait__scanner {
+  position: absolute;
+  z-index: 3;
+
+  left: 0;
+  top: -12%;
+
+  width: 100%;
+  height: 3px;
+
+  opacity: 0;
+  pointer-events: none;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 59, 79, 0.2) 20%,
+    #ff3b4f 50%,
+    rgba(255, 59, 79, 0.2) 80%,
+    transparent
+  );
+
+  box-shadow:
+    0 0 10px rgba(255, 59, 79, 0.9),
+    0 0 25px rgba(255, 59, 79, 0.4);
+}
+
+.cyber-portrait__scanner::after {
+  content: "";
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  top: 0;
+
+  height: 65px;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 59, 79, 0.13),
+    transparent
+  );
+}
+
+.cyber-portrait--scanning .cyber-portrait__scanner {
+  animation: neural-scan 0.8s ease-in-out forwards;
+}
+
+@keyframes neural-scan {
+  0% {
+    top: -12%;
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 0.85;
+  }
+
+  85% {
+    opacity: 0.75;
+  }
+
+  100% {
+    top: 105%;
+    opacity: 0;
+  }
+}
+
+/* CYBERNETIC EYE */
+
+.cyber-portrait__eye-glow {
+  position: absolute;
+  z-index: 3;
+
+  left: var(--eye-x);
+  top: var(--eye-y);
+
+  width: 100px;
+  height: 100px;
+
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+
+  pointer-events: none;
+  opacity: 0;
+
+  background: radial-gradient(
+    circle,
+    rgba(255, 20, 45, 0.4),
+    rgba(255, 20, 45, 0.14) 25%,
+    transparent 72%
+  );
+
+  filter: blur(9px);
+  mix-blend-mode: screen;
+
+  transition: opacity 0.35s ease;
+}
+
+.cyber-portrait--eye-active .cyber-portrait__eye-glow {
+  opacity: 1;
+  animation: cyber-eye-pulse 2s ease-in-out infinite;
+}
+
+@keyframes cyber-eye-pulse {
+  0%, 100% {
+    opacity: 0.45;
+    transform: translate(-50%, -50%) scale(0.85);
+  }
+
+  50% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+/* REACTIVE HUD */
+
+.cyber-portrait__hud {
+  position: absolute;
+  z-index: 4;
+
+  left: var(--reveal-x);
+  top: var(--reveal-y);
+
+  width: 310px;
+  height: 310px;
+
+  transform: translate(-50%, -50%);
+
+  pointer-events: none;
+  opacity: 0;
+
+  transition: opacity 0.3s ease;
+}
+
+.cyber-portrait--active .cyber-portrait__hud {
+  opacity: 1;
+}
+
+.cyber-portrait--locked .cyber-portrait__hud {
+  opacity: 0;
+}
+
+.cyber-portrait__hud-ring {
+  position: absolute;
+  inset: 0;
+
+  display: block;
+  border-radius: 50%;
+}
+
+.cyber-portrait__hud-ring--one {
+  border: 1px solid rgba(255, 59, 79, 0.16);
+
+  box-shadow:
+    0 0 12px rgba(255, 59, 79, 0.1),
+    inset 0 0 12px rgba(255, 59, 79, 0.06);
+}
+
+.cyber-portrait__hud-ring--two {
+  inset: 12px;
+
+  border: 1px dashed rgba(255, 59, 79, 0.34);
+
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+
+  animation: hud-rotate 14s linear infinite;
+}
+
+.cyber-portrait__hud-ring--one::before,
+.cyber-portrait__hud-ring--one::after {
+  content: "";
+  position: absolute;
+
+  width: 34px;
+  height: 34px;
+
+  border: 2px solid #ff3b4f;
+}
+
+.cyber-portrait__hud-ring--one::before {
+  top: 16px;
+  left: 16px;
+
+  border-right: 0;
+  border-bottom: 0;
+
+  border-radius: 100% 0 0 0;
+}
+
+.cyber-portrait__hud-ring--one::after {
+  right: 16px;
+  bottom: 16px;
+
+  border-left: 0;
+  border-top: 0;
+
+  border-radius: 0 0 100% 0;
+}
+
+.cyber-portrait__hud-crosshair {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 5px;
+  height: 5px;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+  background: #ff3b4f;
+
+  box-shadow: 0 0 12px #ff3b4f;
+}
+
+.cyber-portrait__hud-coordinate {
+  position: absolute;
+
+  left: 30px;
+  bottom: 27px;
+
+  font-family: monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+
+  color: #ff8290;
+  text-shadow: 0 1px 8px #000;
+}
+
+.cyber-portrait__hud-label {
+  position: absolute;
+
+  right: 25px;
+  top: 32px;
+
+  font-family: monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+
+  color: #ff8290;
+  text-shadow: 0 1px 8px #000;
+}
+
+@keyframes hud-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* CINEMATIC VIGNETTE */
+
+.cyber-portrait__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+
+  pointer-events: none;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.16),
+    transparent 23%,
+    transparent 70%,
+    rgba(0, 0, 0, 0.55)
+  );
+}
+
+/* SMALL STATUS TEXT */
+
+.cyber-portrait__status {
+  position: absolute;
+  z-index: 6;
+
+  top: 17%;
+  left: 5%;
+
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  max-width: 90%;
+
+  font-family: monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+
+  color: #f7f2f3;
+  text-shadow: 0 2px 10px #000;
+
+  pointer-events: none;
+}
+
+.cyber-portrait__status-dot {
+  width: 7px;
+  height: 7px;
+
+  flex-shrink: 0;
+  border-radius: 50%;
+
+  background: #a81932;
+}
+
+.cyber-portrait__status-dot.is-active {
+  background: #ff3b4f;
+
+  box-shadow: 0 0 12px #ff3b4f;
+
+  animation: status-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes status-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* MOBILE */
+
+.cyber-portrait__mobile-hint {
+  display: none;
+}
+
+.cyber-portrait:focus-visible {
+  outline: 2px solid #ff3b4f;
+  outline-offset: -3px;
+}
+
+@media (max-width: 768px) {
+  .cyber-portrait {
+    min-height: 70vh;
+  }
+
+  .cyber-portrait__image {
+    height: 82%;
+  }
+
+  .cyber-portrait__status {
+    top: 7%;
+    left: 6%;
+    font-size: 9px;
+  }
+
+  .cyber-portrait__hud {
+    width: 250px;
+    height: 250px;
+  }
+
+  .cyber-portrait__mobile-hint {
+    display: block;
+
+    position: absolute;
+    z-index: 6;
+
+    bottom: 7%;
+    left: 6%;
+
+    font-family: monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+
+    color: #ff3b4f;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cyber-portrait__reveal,
+  .cyber-portrait__hud,
+  .cyber-portrait__eye-glow {
+    transition: none;
+  }
+
+  .cyber-portrait__scanner,
+  .cyber-portrait__hud-ring--two,
+  .cyber-portrait__status-dot.is-active,
+  .cyber-portrait__eye-glow {
+    animation: none !important;
+  }
+}
