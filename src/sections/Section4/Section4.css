@@ -1286,3 +1286,8 @@
     display: none;
   }
 }
+
+/* Remove giant background numbers behind project previews */
+.work-project-watermark {
+  display: none !important;
+}

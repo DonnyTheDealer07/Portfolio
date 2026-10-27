@@ -1,17 +1,15 @@
+
 import {
   useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
-
 import type {
   MouseEvent as ReactMouseEvent,
   FocusEvent as ReactFocusEvent,
 } from "react";
-
 import { useLocation, useNavigate } from "react-router-dom";
-
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -24,10 +22,8 @@ import {
   UserRound,
   X,
 } from "lucide-react";
-
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
 import "./FloatingNav.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -81,7 +77,7 @@ const navigation: NavItem[] = [
   {
     number: "04",
     label: "PROJECTS",
-    hash: "work",
+    hash: "projects",
     headline: "PROOF IN",
     accent: "THE WORK.",
     description:
@@ -177,9 +173,12 @@ export default function FloatingNav({
   const activeItem = navigation[activeIndex];
   const ActiveIcon = activeItem.icon;
 
+  // ==========================================
+  // ACTIVE NAVIGATION TRACKER
+  // ==========================================
+
   const updateTracker = useCallback((index: number) => {
     const nav = navRef.current;
-
     if (!nav) return;
 
     const item = nav.querySelector<HTMLElement>(
@@ -207,7 +206,7 @@ export default function FloatingNav({
   );
 
   // ==========================================
-  // SCROLL LOCK — FIXED
+  // SCROLL LOCK
   // ==========================================
 
   const lockPageScroll = useCallback(() => {
@@ -224,7 +223,6 @@ export default function FloatingNav({
 
   const unlockPageScroll = useCallback(() => {
     const previous = originalOverflowRef.current;
-
     if (!previous) return;
 
     document.body.style.overflow = previous.body;
@@ -294,7 +292,6 @@ export default function FloatingNav({
 
   useEffect(() => {
     const overlay = overlayRef.current;
-
     if (!overlay) return;
 
     timelineRef.current?.kill();
@@ -347,7 +344,6 @@ export default function FloatingNav({
 
       initializedRef.current = true;
       previousOpenRef.current = open;
-
       return;
     }
 
@@ -435,10 +431,8 @@ export default function FloatingNav({
       );
 
       timelineRef.current = timeline;
-
       initializedRef.current = true;
       previousOpenRef.current = true;
-
       return;
     }
 
@@ -450,7 +444,6 @@ export default function FloatingNav({
 
       initializedRef.current = true;
       previousOpenRef.current = false;
-
       return;
     }
 
@@ -459,8 +452,7 @@ export default function FloatingNav({
       return;
     }
 
-    // Fade out, then restore scrolling.
-    // No delayed unlock timers on hover changes.
+    // Fade out before restoring page scrolling.
 
     const timeline = gsap.timeline({
       onComplete: () => {
@@ -513,7 +505,6 @@ export default function FloatingNav({
     });
 
     timelineRef.current = timeline;
-
     previousOpenRef.current = false;
 
     return () => {
@@ -591,7 +582,7 @@ export default function FloatingNav({
   }, [open, closeMenu]);
 
   // ==========================================
-  // TRACKER — SEPARATE FROM SCROLL LOCK
+  // NAVIGATION TRACKER
   // ==========================================
 
   useEffect(() => {
@@ -644,14 +635,13 @@ export default function FloatingNav({
   }, [activeIndex, open]);
 
   // ==========================================
-  // NAVIGATION — FIXED
+  // NAVIGATION — PROJECTS FIX APPLIED
   // ==========================================
 
   const navigateTo = (hash: string) => {
     if (navigatingRef.current) return;
 
     navigatingRef.current = true;
-
     closeMenu();
 
     if (navigationTimerRef.current !== null) {
@@ -665,7 +655,6 @@ export default function FloatingNav({
     navigationTimerRef.current = window.setTimeout(() => {
       navigationTimerRef.current = null;
 
-      // Ensure menu scroll lock is gone before navigating.
       unlockPageScroll();
 
       if (location.pathname !== "/") {
@@ -674,7 +663,7 @@ export default function FloatingNav({
         return;
       }
 
-      // Refresh GSAP pin positions before calculating the target.
+      // Refresh pinned GSAP sections before scrolling.
       ScrollTrigger.refresh();
 
       const target = document.getElementById(hash);
@@ -688,8 +677,6 @@ export default function FloatingNav({
         target.getBoundingClientRect().top +
         window.scrollY;
 
-      // Direct scrolling avoids competing smooth-scroll
-      // animations across pinned horizontal sections.
       window.scrollTo({
         top: Math.max(0, targetY),
         left: 0,
@@ -716,7 +703,6 @@ export default function FloatingNav({
     if (!onReplay || navigatingRef.current) return;
 
     navigatingRef.current = true;
-
     closeMenu();
 
     if (replayTimerRef.current !== null) {
@@ -735,7 +721,6 @@ export default function FloatingNav({
       });
 
       ScrollTrigger.update();
-
       navigatingRef.current = false;
 
       onReplay();
@@ -833,6 +818,7 @@ export default function FloatingNav({
 
   return (
     <>
+      {/* MENU TOGGLE */}
       <button
         ref={toggleRef}
         type="button"
@@ -861,6 +847,7 @@ export default function FloatingNav({
         )}
       </button>
 
+      {/* FULLSCREEN CINEMATIC MENU */}
       <div
         ref={overlayRef}
         id="cinematic-menu-overlay"
@@ -878,6 +865,7 @@ export default function FloatingNav({
         <div className="cinematic-menu-panel cinematic-menu-panel-left" />
         <div className="cinematic-menu-panel cinematic-menu-panel-right" />
 
+        {/* ANIMATED RADAR BACKGROUND */}
         <div
           className="cinematic-menu-background"
           aria-hidden="true"
@@ -900,6 +888,7 @@ export default function FloatingNav({
         </div>
 
         <div className="cinematic-menu-shell">
+          {/* HEADER */}
           <header className="cinematic-menu-top cinematic-menu-reveal">
             <span className="cinematic-menu-brand">
               CORNÉ CARELSE<span>.</span>
@@ -911,6 +900,7 @@ export default function FloatingNav({
           </header>
 
           <div className="cinematic-menu-body">
+            {/* LEFT NAVIGATION */}
             <div className="cinematic-menu-left">
               <span className="cinematic-menu-caption cinematic-menu-reveal">
                 NAVIGATION / INDEX
@@ -972,6 +962,7 @@ export default function FloatingNav({
               </nav>
             </div>
 
+            {/* RIGHT PREVIEW */}
             <aside className="cinematic-menu-right">
               <div className="cinematic-menu-preview-top cinematic-menu-reveal">
                 <span>MORE THAN A PORTFOLIO</span>
@@ -1013,6 +1004,7 @@ export default function FloatingNav({
                 </div>
               </div>
 
+              {/* PROGRESS BAR */}
               <div className="cinematic-menu-preview-progress cinematic-menu-reveal">
                 <span
                   style={{
@@ -1025,6 +1017,7 @@ export default function FloatingNav({
                 />
               </div>
 
+              {/* QUICK ACCESS */}
               <div className="cinematic-menu-shortcuts cinematic-menu-reveal">
                 <span className="cinematic-menu-shortcuts-caption">
                   QUICK ACCESS
@@ -1033,7 +1026,7 @@ export default function FloatingNav({
                 <button
                   type="button"
                   tabIndex={open ? 0 : -1}
-                  onClick={() => navigateTo("work")}
+                  onClick={() => navigateTo("projects")}
                 >
                   VIEW PROJECTS
                   <ArrowUpRight size={16} />
@@ -1049,6 +1042,7 @@ export default function FloatingNav({
                 </button>
               </div>
 
+              {/* REPLAY INTRO */}
               {onReplay &&
                 location.pathname === "/" && (
                   <button
@@ -1064,6 +1058,7 @@ export default function FloatingNav({
             </aside>
           </div>
 
+          {/* FOOTER */}
           <footer className="cinematic-menu-footer cinematic-menu-reveal">
             <span>
               © {new Date().getFullYear()} CORNÉ CARELSE
