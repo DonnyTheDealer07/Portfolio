@@ -173,9 +173,7 @@ export default function FloatingNav({
   const activeItem = navigation[activeIndex];
   const ActiveIcon = activeItem.icon;
 
-  // ==========================================
   // ACTIVE NAVIGATION TRACKER
-  // ==========================================
 
   const updateTracker = useCallback((index: number) => {
     const nav = navRef.current;
@@ -205,9 +203,7 @@ export default function FloatingNav({
     [updateTracker]
   );
 
-  // ==========================================
   // SCROLL LOCK
-  // ==========================================
 
   const lockPageScroll = useCallback(() => {
     if (originalOverflowRef.current) return;
@@ -231,9 +227,7 @@ export default function FloatingNav({
     originalOverflowRef.current = null;
   }, []);
 
-  // ==========================================
   // MENU OPEN / CLOSE
-  // ==========================================
 
   const closeMenu = useCallback(() => {
     if (!openRef.current) return;
@@ -252,9 +246,7 @@ export default function FloatingNav({
     setOpen(true);
   }, [closeMenu]);
 
-  // ==========================================
   // SCROLL STATE
-  // ==========================================
 
   useEffect(() => {
     const handleScroll = () => {
@@ -272,9 +264,7 @@ export default function FloatingNav({
     };
   }, []);
 
-  // ==========================================
   // HIDDEN / ROUTE CHANGES
-  // ==========================================
 
   useEffect(() => {
     if (hidden) {
@@ -286,9 +276,7 @@ export default function FloatingNav({
     closeMenu();
   }, [location.pathname, closeMenu]);
 
-  // ==========================================
-  // CINEMATIC MENU ANIMATIONS
-  // ==========================================
+  // GSAP MENU ANIMATIONS
 
   useEffect(() => {
     const overlay = overlayRef.current;
@@ -308,10 +296,6 @@ export default function FloatingNav({
       ".cinematic-menu-link"
     );
 
-    const background = overlay.querySelector(
-      ".cinematic-menu-background"
-    );
-
     const reducedMotion = prefersReducedMotion();
 
     if (reducedMotion) {
@@ -329,12 +313,6 @@ export default function FloatingNav({
         y: 0,
         rotateX: 0,
       });
-
-      if (background) {
-        gsap.set(background, {
-          autoAlpha: 1,
-        });
-      }
 
       if (open) {
         lockPageScroll();
@@ -379,12 +357,6 @@ export default function FloatingNav({
         y: 20,
       });
 
-      if (background) {
-        gsap.set(background, {
-          autoAlpha: 0,
-        });
-      }
-
       const timeline = gsap.timeline();
 
       timeline.to(panels, {
@@ -392,18 +364,6 @@ export default function FloatingNav({
         duration: 0.8,
         ease: "power4.inOut",
       });
-
-      if (background) {
-        timeline.to(
-          background,
-          {
-            autoAlpha: 1,
-            duration: 0.6,
-            ease: "power2.out",
-          },
-          "-=0.4"
-        );
-      }
 
       timeline.to(
         links,
@@ -452,8 +412,6 @@ export default function FloatingNav({
       return;
     }
 
-    // Fade out before restoring page scrolling.
-
     const timeline = gsap.timeline({
       onComplete: () => {
         gsap.set(overlay, {
@@ -476,18 +434,6 @@ export default function FloatingNav({
       },
       0
     );
-
-    if (background) {
-      timeline.to(
-        background,
-        {
-          autoAlpha: 0,
-          duration: 0.4,
-          ease: "power2.inOut",
-        },
-        0
-      );
-    }
 
     timeline.to(
       overlay,
@@ -512,9 +458,7 @@ export default function FloatingNav({
     };
   }, [open, lockPageScroll, unlockPageScroll]);
 
-  // ==========================================
   // KEYBOARD ACCESSIBILITY
-  // ==========================================
 
   useEffect(() => {
     if (!open) return;
@@ -581,9 +525,7 @@ export default function FloatingNav({
     };
   }, [open, closeMenu]);
 
-  // ==========================================
   // NAVIGATION TRACKER
-  // ==========================================
 
   useEffect(() => {
     if (!open) return;
@@ -603,9 +545,7 @@ export default function FloatingNav({
     };
   }, [open, activeIndex, updateTracker]);
 
-  // ==========================================
-  // PREVIEW TRANSITION
-  // ==========================================
+  // PREVIEW TRANSITIONS
 
   useEffect(() => {
     if (!open || prefersReducedMotion()) return;
@@ -634,9 +574,7 @@ export default function FloatingNav({
     );
   }, [activeIndex, open]);
 
-  // ==========================================
-  // NAVIGATION — PROJECTS FIX APPLIED
-  // ==========================================
+  // NAVIGATION
 
   const navigateTo = (hash: string) => {
     if (navigatingRef.current) return;
@@ -663,7 +601,6 @@ export default function FloatingNav({
         return;
       }
 
-      // Refresh pinned GSAP sections before scrolling.
       ScrollTrigger.refresh();
 
       const target = document.getElementById(hash);
@@ -695,9 +632,7 @@ export default function FloatingNav({
     }, delay);
   };
 
-  // ==========================================
   // REPLAY CINEMATIC INTRO
-  // ==========================================
 
   const replayIntro = () => {
     if (!onReplay || navigatingRef.current) return;
@@ -727,9 +662,7 @@ export default function FloatingNav({
     }, prefersReducedMotion() ? 0 : EXIT_DURATION * 1000 + 80);
   };
 
-  // ==========================================
   // MAGNETIC ARROWS
-  // ==========================================
 
   const handleArrowMove = (
     event: ReactMouseEvent<HTMLAnchorElement>
@@ -794,9 +727,7 @@ export default function FloatingNav({
     }
   };
 
-  // ==========================================
   // CLEANUP
-  // ==========================================
 
   useEffect(() => {
     return () => {
@@ -819,6 +750,7 @@ export default function FloatingNav({
   return (
     <>
       {/* MENU TOGGLE */}
+
       <button
         ref={toggleRef}
         type="button"
@@ -847,7 +779,8 @@ export default function FloatingNav({
         )}
       </button>
 
-      {/* FULLSCREEN CINEMATIC MENU */}
+      {/* FULLSCREEN MENU */}
+
       <div
         ref={overlayRef}
         id="cinematic-menu-overlay"
@@ -865,30 +798,11 @@ export default function FloatingNav({
         <div className="cinematic-menu-panel cinematic-menu-panel-left" />
         <div className="cinematic-menu-panel cinematic-menu-panel-right" />
 
-        {/* ANIMATED RADAR BACKGROUND */}
-        <div
-          className="cinematic-menu-background"
-          aria-hidden="true"
-        >
-          <div className="cinematic-menu-radar">
-            <div className="cinematic-menu-orbit orbit-one">
-              <span className="cinematic-menu-orbit-particle" />
-            </div>
-
-            <div className="cinematic-menu-orbit orbit-two">
-              <span className="cinematic-menu-orbit-particle" />
-            </div>
-
-            <div className="cinematic-menu-orbit orbit-three">
-              <span className="cinematic-menu-orbit-particle" />
-            </div>
-
-            <div className="cinematic-menu-radar-core" />
-          </div>
-        </div>
+        {/* CLEAN BLACK BACKGROUND - NO RADAR OR CIRCLES */}
 
         <div className="cinematic-menu-shell">
           {/* HEADER */}
+
           <header className="cinematic-menu-top cinematic-menu-reveal">
             <span className="cinematic-menu-brand">
               CORNÉ CARELSE<span>.</span>
@@ -901,6 +815,7 @@ export default function FloatingNav({
 
           <div className="cinematic-menu-body">
             {/* LEFT NAVIGATION */}
+
             <div className="cinematic-menu-left">
               <span className="cinematic-menu-caption cinematic-menu-reveal">
                 NAVIGATION / INDEX
@@ -962,7 +877,8 @@ export default function FloatingNav({
               </nav>
             </div>
 
-            {/* RIGHT PREVIEW */}
+            {/* RIGHT PREVIEW - NO BACKGROUND NUMBER */}
+
             <aside className="cinematic-menu-right">
               <div className="cinematic-menu-preview-top cinematic-menu-reveal">
                 <span>MORE THAN A PORTFOLIO</span>
@@ -970,18 +886,6 @@ export default function FloatingNav({
               </div>
 
               <div className="cinematic-menu-preview-stage">
-                <div
-                  className="cinematic-menu-ghost-position"
-                  aria-hidden="true"
-                >
-                  <span
-                    key={activeItem.number}
-                    className="cinematic-menu-ghost-number"
-                  >
-                    {activeItem.number}
-                  </span>
-                </div>
-
                 <div className="cinematic-menu-preview-content">
                   <div className="cinematic-menu-preview-icon">
                     <ActiveIcon
@@ -1005,6 +909,7 @@ export default function FloatingNav({
               </div>
 
               {/* PROGRESS BAR */}
+
               <div className="cinematic-menu-preview-progress cinematic-menu-reveal">
                 <span
                   style={{
@@ -1018,6 +923,7 @@ export default function FloatingNav({
               </div>
 
               {/* QUICK ACCESS */}
+
               <div className="cinematic-menu-shortcuts cinematic-menu-reveal">
                 <span className="cinematic-menu-shortcuts-caption">
                   QUICK ACCESS
@@ -1043,6 +949,7 @@ export default function FloatingNav({
               </div>
 
               {/* REPLAY INTRO */}
+
               {onReplay &&
                 location.pathname === "/" && (
                   <button
@@ -1059,6 +966,7 @@ export default function FloatingNav({
           </div>
 
           {/* FOOTER */}
+
           <footer className="cinematic-menu-footer cinematic-menu-reveal">
             <span>
               © {new Date().getFullYear()} CORNÉ CARELSE

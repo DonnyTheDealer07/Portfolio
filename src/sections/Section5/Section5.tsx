@@ -20,7 +20,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 type Milestone = {
   id: string;
-  number: string;
   period: string;
   type: string;
   title: string;
@@ -34,7 +33,6 @@ type Milestone = {
 const milestones: Milestone[] = [
   {
     id: "dev-craft",
-    number: "01",
     period: "MAR 2025 — MAY 2026",
     type: "PROFESSIONAL EXPERIENCE",
     title: "WEB DEVELOPER",
@@ -51,60 +49,94 @@ const milestones: Milestone[] = [
   },
   {
     id: "independent",
-    number: "02",
     period: "INDEPENDENT DEVELOPMENT",
     type: "PERSONAL PROJECTS",
     title: "BUILDING BEYOND THE CLASSROOM",
     organization: "PERSONAL DEVELOPMENT",
     description:
       "Taking ideas from concept to working applications. Projects such as Pure SA have allowed me to explore frontend development, backend systems, responsive interfaces, and the complete development process.",
-    highlights: ["PURE SA", "REACT", "FULL-STACK PROJECTS"],
+    highlights: [
+      "PURE SA",
+      "REACT",
+      "FULL-STACK PROJECTS",
+    ],
     icon: "code",
     side: "right",
   },
   {
     id: "learning",
-    number: "03",
     period: "CONTINUOUS DEVELOPMENT",
     type: "LEARNING & GROWTH",
     title: "NEVER STOP LEARNING",
     organization: "SELF-DIRECTED EDUCATION",
     description:
       "Building a stronger foundation through focused study and hands-on practice, including training in JavaScript, TypeScript, React, and full-stack web development.",
-    highlights: ["JAVASCRIPT", "TYPESCRIPT", "REACT", "FULL STACK"],
+    highlights: [
+      "JAVASCRIPT",
+      "TYPESCRIPT",
+      "REACT",
+      "FULL STACK",
+    ],
     icon: "learn",
     side: "left",
   },
 ];
 
-function MilestoneIcon({ type }: { type: Milestone["icon"] }) {
+function MilestoneIcon({
+  type,
+}: {
+  type: Milestone["icon"];
+}) {
   if (type === "work") {
-    return <BriefcaseBusiness size={22} strokeWidth={1.5} />;
+    return (
+      <BriefcaseBusiness
+        size={22}
+        strokeWidth={1.5}
+      />
+    );
   }
 
   if (type === "code") {
-    return <Code2 size={22} strokeWidth={1.5} />;
+    return (
+      <Code2
+        size={22}
+        strokeWidth={1.5}
+      />
+    );
   }
 
-  return <GraduationCap size={23} strokeWidth={1.5} />;
+  return (
+    <GraduationCap
+      size={23}
+      strokeWidth={1.5}
+    />
+  );
 }
 
-function MilestoneCard({ milestone }: { milestone: Milestone }) {
+function MilestoneCard({
+  milestone,
+}: {
+  milestone: Milestone;
+}) {
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseMove = (event: ReactMouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (
+    event: ReactMouseEvent<HTMLDivElement>
+  ) => {
     const card = cardRef.current;
+
     if (!card) return;
 
-    const rect = card.getBoundingClientRect();
+    const bounds = card.getBoundingClientRect();
 
     card.style.setProperty(
       "--spotlight-x",
-      `${event.clientX - rect.left}px`
+      `${event.clientX - bounds.left}px`
     );
+
     card.style.setProperty(
       "--spotlight-y",
-      `${event.clientY - rect.top}px`
+      `${event.clientY - bounds.top}px`
     );
   };
 
@@ -114,31 +146,44 @@ function MilestoneCard({ milestone }: { milestone: Milestone }) {
       data-journey-milestone
       id={`journey-${milestone.id}`}
     >
-      <div className="journey-milestone-marker" aria-hidden="true">
+      <div
+        className="journey-milestone-marker"
+        aria-hidden="true"
+      >
         <span className="journey-marker-outer">
           <span className="journey-marker-inner" />
         </span>
       </div>
 
-      <div className="journey-milestone-connector" aria-hidden="true" />
+      <div
+        className="journey-milestone-connector"
+        aria-hidden="true"
+      />
 
       <div
         className="journey-milestone-content"
         ref={cardRef}
         onMouseMove={handleMouseMove}
       >
-        <div className="journey-card-spotlight" aria-hidden="true" />
-        <div className="journey-card-scan" aria-hidden="true" />
+        <div
+          className="journey-card-spotlight"
+          aria-hidden="true"
+        />
+
+        <div
+          className="journey-card-scan"
+          aria-hidden="true"
+        />
 
         <div className="journey-card-body">
           <div className="journey-milestone-top">
-            <span className="journey-milestone-number">
-              MILESTONE / {milestone.number}
+            <span className="journey-milestone-label">
+              THE ROAD SO FAR
             </span>
 
             <span className="journey-milestone-status">
               <span />
-              CHAPTER {milestone.number}
+              CHAPTER COMPLETED
             </span>
           </div>
 
@@ -169,9 +214,13 @@ function MilestoneCard({ milestone }: { milestone: Milestone }) {
           </p>
 
           <div className="journey-milestone-tags">
-            {milestone.highlights.map((highlight) => (
-              <span key={highlight}>{highlight}</span>
-            ))}
+            {milestone.highlights.map(
+              (highlight) => (
+                <span key={highlight}>
+                  {highlight}
+                </span>
+              )
+            )}
           </div>
 
           <div className="journey-milestone-footer">
@@ -179,27 +228,10 @@ function MilestoneCard({ milestone }: { milestone: Milestone }) {
               <span className="journey-milestone-footer-dot" />
               EXPERIENCE RECORDED
             </span>
-            <span>{milestone.number} / 03</span>
+
+            <span>KEEP BUILDING</span>
           </div>
         </div>
-      </div>
-
-      <div className="journey-milestone-watermark" aria-hidden="true">
-        <span
-          className="journey-watermark-outline"
-          data-number={milestone.number}
-        >
-          {milestone.number}
-        </span>
-        <span
-          className="journey-watermark-fill"
-          data-number={milestone.number}
-        >
-          {milestone.number}
-        </span>
-        <span className="journey-watermark-glow">
-          {milestone.number}
-        </span>
       </div>
     </article>
   );
@@ -208,23 +240,42 @@ function MilestoneCard({ milestone }: { milestone: Milestone }) {
 function CrimsonReactor() {
   const reactorRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseMove = (event: ReactMouseEvent<HTMLDivElement>) => {
-    const reactor = reactorRef.current;
-    if (!reactor) return;
+  const handleMouseMove = (
+    event: ReactMouseEvent<HTMLDivElement>
+  ) => {
+    const element = reactorRef.current;
+
+    if (!element) return;
 
     if (
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      window.matchMedia("(pointer: coarse)").matches
+      window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches
     ) {
       return;
     }
 
-    const rect = reactor.getBoundingClientRect();
+    if (
+      window.matchMedia(
+        "(pointer: coarse)"
+      ).matches
+    ) {
+      return;
+    }
 
-    const x = (event.clientX - rect.left) / rect.width - 0.5;
-    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    const bounds = element.getBoundingClientRect();
 
-    gsap.to(reactor, {
+    const x =
+      (event.clientX - bounds.left) /
+        bounds.width -
+      0.5;
+
+    const y =
+      (event.clientY - bounds.top) /
+        bounds.height -
+      0.5;
+
+    gsap.to(element, {
       rotateY: x * 12,
       rotateX: -y * 12,
       duration: 0.8,
@@ -251,7 +302,10 @@ function CrimsonReactor() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="journey-reactor-tilt" ref={reactorRef}>
+      <div
+        className="journey-reactor-tilt"
+        ref={reactorRef}
+      >
         <div className="journey-reactor-glow" />
 
         <div className="journey-future-orbit journey-future-orbit-one">
@@ -271,7 +325,10 @@ function CrimsonReactor() {
         <div className="journey-reactor-shockwave journey-reactor-shockwave-two" />
 
         <div className="journey-future-core">
-          <Rocket size={32} strokeWidth={1.2} />
+          <Rocket
+            size={32}
+            strokeWidth={1.2}
+          />
         </div>
       </div>
     </div>
@@ -283,6 +340,7 @@ export default function Section5() {
 
   useEffect(() => {
     const section = sectionRef.current;
+
     if (!section) return;
 
     const reducedMotion = window.matchMedia(
@@ -290,20 +348,29 @@ export default function Section5() {
     ).matches;
 
     const context = gsap.context(() => {
-      const milestoneElements = gsap.utils.toArray<HTMLElement>(
-        "[data-journey-milestone]"
-      );
+      const milestoneElements =
+        gsap.utils.toArray<HTMLElement>(
+          "[data-journey-milestone]"
+        );
 
       if (reducedMotion) {
-        milestoneElements.forEach((milestone) => {
-          milestone.classList.add("journey-milestone-active");
-        });
+        milestoneElements.forEach((item) =>
+          item.classList.add(
+            "journey-milestone-active"
+          )
+        );
+
         return;
       }
 
+      // INTRO EYEBROW
+
       gsap.fromTo(
         ".journey-intro-eyebrow",
-        { autoAlpha: 0, y: 25 },
+        {
+          autoAlpha: 0,
+          y: 25,
+        },
         {
           autoAlpha: 1,
           y: 0,
@@ -316,6 +383,8 @@ export default function Section5() {
           },
         }
       );
+
+      // MAIN HEADING
 
       gsap.fromTo(
         ".journey-heading-line",
@@ -339,13 +408,19 @@ export default function Section5() {
         }
       );
 
+      // INTRO DESCRIPTION
+
       gsap.fromTo(
-        ".journey-intro-description",
-        { autoAlpha: 0, y: 30 },
+        ".journey-intro-description, .journey-intro-scroll",
+        {
+          autoAlpha: 0,
+          y: 30,
+        },
         {
           autoAlpha: 1,
           y: 0,
           duration: 0.75,
+          stagger: 0.12,
           ease: "power3.out",
           scrollTrigger: {
             trigger: ".journey-intro",
@@ -355,10 +430,13 @@ export default function Section5() {
         }
       );
 
-      // Crimson timeline drawing + traveling energy head
+      // GLOWING LINE DRAWS AS YOU SCROLL
+
       gsap.fromTo(
         ".journey-timeline-progress",
-        { scaleY: 0 },
+        {
+          scaleY: 0,
+        },
         {
           scaleY: 1,
           ease: "none",
@@ -371,9 +449,13 @@ export default function Section5() {
         }
       );
 
+      // GLOWING DOT TRAVELS DOWN THE LINE
+
       gsap.fromTo(
         ".journey-timeline-energy",
-        { top: "0%" },
+        {
+          top: "0%",
+        },
         {
           top: "100%",
           ease: "none",
@@ -386,145 +468,116 @@ export default function Section5() {
         }
       );
 
-      milestoneElements.forEach((milestone) => {
-        const card = milestone.querySelector(
-          ".journey-milestone-content"
-        );
+      // EXPERIENCE CARDS
 
-        const marker = milestone.querySelector(
-          ".journey-milestone-marker"
-        );
+      milestoneElements.forEach(
+        (milestone) => {
+          const card =
+            milestone.querySelector(
+              ".journey-milestone-content"
+            );
 
-        const connector = milestone.querySelector(
-          ".journey-milestone-connector"
-        );
+          const marker =
+            milestone.querySelector(
+              ".journey-milestone-marker"
+            );
 
-        const watermark = milestone.querySelector(
-          ".journey-milestone-watermark"
-        );
+          const connector =
+            milestone.querySelector(
+              ".journey-milestone-connector"
+            );
 
-        const fill = milestone.querySelector(
-          ".journey-watermark-fill"
-        );
+          const scan =
+            milestone.querySelector(
+              ".journey-card-scan"
+            );
 
-        const scan = milestone.querySelector(
-          ".journey-card-scan"
-        );
+          const fromX =
+            milestone.classList.contains(
+              "journey-milestone--left"
+            )
+              ? -70
+              : 70;
 
-        const fromX = milestone.classList.contains(
-          "journey-milestone--left"
-        )
-          ? -75
-          : 75;
-
-        const timeline = gsap.timeline({
-          scrollTrigger: {
-            trigger: milestone,
-            start: "top 76%",
-            once: true,
-            onEnter: () => {
-              milestone.classList.add("journey-milestone-active");
-            },
-          },
-        });
-
-        timeline
-          .fromTo(
-            marker,
-            { scale: 0.3, autoAlpha: 0 },
-            {
-              scale: 1,
-              autoAlpha: 1,
-              duration: 0.65,
-              ease: "back.out(2)",
-            }
-          )
-          .fromTo(
-            connector,
-            { scaleX: 0, autoAlpha: 0 },
-            {
-              scaleX: 1,
-              autoAlpha: 1,
-              duration: 0.5,
-              ease: "power3.out",
-            },
-            "-=0.3"
-          )
-          .fromTo(
-            card,
-            {
-              autoAlpha: 0,
-              x: fromX,
-              y: 45,
-              filter: "blur(12px)",
-            },
-            {
-              autoAlpha: 1,
-              x: 0,
-              y: 0,
-              filter: "blur(0px)",
-              duration: 1.05,
-              ease: "power4.out",
-            },
-            "-=0.3"
-          )
-          .fromTo(
-            watermark,
-            {
-              autoAlpha: 0,
-              y: 55,
-              scale: 0.82,
-            },
-            {
-              autoAlpha: 1,
-              y: 0,
-              scale: 1,
-              duration: 1.1,
-              ease: "power4.out",
-            },
-            "-=0.9"
-          )
-          .fromTo(
-            fill,
-            { clipPath: "inset(100% 0% 0% 0%)" },
-            {
-              clipPath: "inset(0% 0% 0% 0%)",
-              duration: 1.45,
-              ease: "power3.inOut",
-            },
-            "-=0.8"
-          )
-          .fromTo(
-            scan,
-            {
-              yPercent: -110,
-              autoAlpha: 0,
-            },
-            {
-              yPercent: 110,
-              autoAlpha: 1,
-              duration: 1.25,
-              ease: "power2.inOut",
-            },
-            "-=1.35"
-          )
-          .set(scan, { autoAlpha: 0 });
-
-        gsap.fromTo(
-          watermark,
-          { y: 40 },
-          {
-            y: -40,
-            ease: "none",
+          const timeline = gsap.timeline({
             scrollTrigger: {
               trigger: milestone,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1,
+              start: "top 76%",
+              once: true,
+              onEnter: () =>
+                milestone.classList.add(
+                  "journey-milestone-active"
+                ),
             },
-          }
-        );
-      });
+          });
+
+          timeline
+            .fromTo(
+              marker,
+              {
+                scale: 0.3,
+                autoAlpha: 0,
+              },
+              {
+                scale: 1,
+                autoAlpha: 1,
+                duration: 0.65,
+                ease: "back.out(2)",
+              }
+            )
+            .fromTo(
+              connector,
+              {
+                scaleX: 0,
+                autoAlpha: 0,
+              },
+              {
+                scaleX: 1,
+                autoAlpha: 1,
+                duration: 0.5,
+                ease: "power3.out",
+              },
+              "-=0.3"
+            )
+            .fromTo(
+              card,
+              {
+                autoAlpha: 0,
+                x: fromX,
+                y: 45,
+                filter: "blur(12px)",
+              },
+              {
+                autoAlpha: 1,
+                x: 0,
+                y: 0,
+                filter: "blur(0px)",
+                duration: 1.05,
+                ease: "power4.out",
+              },
+              "-=0.3"
+            )
+            .fromTo(
+              scan,
+              {
+                yPercent: -110,
+                autoAlpha: 0,
+              },
+              {
+                yPercent: 110,
+                autoAlpha: 1,
+                duration: 1.2,
+                ease: "power2.inOut",
+              },
+              "-=0.9"
+            )
+            .set(scan, {
+              autoAlpha: 0,
+            });
+        }
+      );
+
+      // FINAL REACTOR
 
       gsap.fromTo(
         ".journey-reactor-tilt",
@@ -546,6 +599,8 @@ export default function Section5() {
           },
         }
       );
+
+      // FINAL HEADING
 
       gsap.fromTo(
         ".journey-future-heading",
@@ -569,8 +624,11 @@ export default function Section5() {
       );
 
       gsap.fromTo(
-        ".journey-future-description, .journey-future-footer",
-        { autoAlpha: 0, y: 30 },
+        ".journey-future-eyebrow, .journey-future-description, .journey-future-footer",
+        {
+          autoAlpha: 0,
+          y: 30,
+        },
         {
           autoAlpha: 1,
           y: 0,
@@ -597,7 +655,7 @@ export default function Section5() {
     >
       <div className="journey-intro">
         <div className="journey-section-topline">
-          <span>05 / EXPERIENCE</span>
+          <span>EXPERIENCE</span>
           <span className="journey-topline-rule" />
           <span>THE DEVELOPMENT JOURNEY</span>
         </div>
@@ -636,8 +694,12 @@ export default function Section5() {
       </div>
 
       <div className="journey-timeline">
-        <div className="journey-timeline-track" aria-hidden="true">
+        <div
+          className="journey-timeline-track"
+          aria-hidden="true"
+        >
           <div className="journey-timeline-progress" />
+
           <div className="journey-timeline-energy">
             <span className="journey-timeline-energy-core" />
           </div>
@@ -672,9 +734,10 @@ export default function Section5() {
           </h2>
 
           <p className="journey-future-description">
-            I'm ready to bring my skills, creativity, and
-            determination to a professional development team.
-            The journey is only getting started.
+            I'm ready to bring my skills, creativity,
+            and determination to a professional
+            development team. The journey is only
+            getting started.
           </p>
         </div>
 
