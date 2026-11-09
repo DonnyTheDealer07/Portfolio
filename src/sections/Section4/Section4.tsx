@@ -11,6 +11,7 @@ import {
   Code2,
   ExternalLink,
   Heart,
+  LockKeyhole,
   Monitor,
   MousePointer2,
   Sparkles,
@@ -25,6 +26,7 @@ type Project = {
   id: string;
   index: string;
   name: string;
+  titleLines: { text: string; accent?: boolean }[];
   eyebrow: string;
   description: string;
   image: string;
@@ -40,6 +42,7 @@ const projects: Project[] = [
     id: "pure-sa",
     index: "01",
     name: "PURE SA",
+    titleLines: [{ text: "PURE" }, { text: "SA.", accent: true }],
     eyebrow: "FEATURED CLIENT PROJECT",
     description:
       "A modern South African product website supported by a custom administration dashboard and backend infrastructure. Designed to make product discovery feel effortless.",
@@ -54,6 +57,11 @@ const projects: Project[] = [
     id: "for-my-baby",
     index: "02",
     name: "FOR MY BEAUTIFUL GIRL",
+    titleLines: [
+      { text: "FOR MY" },
+      { text: "BEAUTIFUL", accent: true },
+      { text: "GIRL." },
+    ],
     eyebrow: "PERSONAL CREATIVE PROJECT",
     description:
       "A personal web experience created with a more expressive, emotional direction. A reminder that development can be about creating meaningful moments, not only solving business problems.",
@@ -63,6 +71,42 @@ const projects: Project[] = [
     tags: ["CREATIVE WEB", "INTERACTIVE EXPERIENCE", "PERSONAL PROJECT"],
     variant: "personal",
     icon: "heart",
+  },
+  {
+    id: "noxi",
+    index: "03",
+    name: "NOXI",
+    titleLines: [
+      { text: "NOXI" },
+      { text: "MUSIC.", accent: true },
+    ],
+    eyebrow: "SPOTIFY-POWERED MUSIC EXPERIENCE",
+    description:
+      "A custom Spotify-connected music experience with personalised playlists, a redesigned library, and animated atmospheres. Built to make listening feel more immersive and expressive.",
+    image: "/websites/noxi.png",
+    url: "https://noxi-personal-spotify.vercel.app/",
+    category: "FRONTEND DEVELOPMENT / MUSIC APPLICATION",
+    tags: ["REACT", "TYPESCRIPT", "SPOTIFY API", "GSAP"],
+    variant: "personal",
+    icon: "code",
+  },
+  {
+    id: "watch",
+    index: "04",
+    name: "3D WATCH",
+    titleLines: [
+      { text: "3D" },
+      { text: "WATCH.", accent: true },
+    ],
+    eyebrow: "INTERACTIVE 3D WEB EXPERIENCE",
+    description:
+      "A cinematic watch showcase combining a detailed 3D timepiece, immersive presentation, and motion-driven storytelling. An exploration of how interactive visuals can elevate a product website.",
+    image: "/websites/watch.png",
+    url: "https://watch-three-livid.vercel.app/",
+    category: "CREATIVE DEVELOPMENT / 3D SHOWCASE",
+    tags: ["THREE.JS", "3D", "ANIMATION", "INTERACTIVE DESIGN"],
+    variant: "commerce",
+    icon: "code",
   },
 ];
 
@@ -341,21 +385,17 @@ function ProjectPanel({ project }: { project: Project }) {
           </div>
 
           <h3 className="work-project-title" data-work-title>
-            {project.name === "FOR MY BEAUTIFUL GIRL" ? (
-              <>
-                FOR MY
-                <br />
-                <span>BEAUTIFUL</span>
-                <br />
-                GIRL.
-              </>
-            ) : (
-              <>
-                PURE
-                <br />
-                <span>SA.</span>
-              </>
-            )}
+            {project.titleLines.map((line, index) => (
+              <span
+                key={`${project.id}-title-${index}`}
+                style={{
+                  color: line.accent ? undefined : "#fff",
+                }}
+              >
+                {index > 0 && <br />}
+                {line.text}
+              </span>
+            ))}
           </h3>
 
           <p className="work-project-description" data-work-reveal>
@@ -367,6 +407,40 @@ function ProjectPanel({ project }: { project: Project }) {
               <span key={tag}>{tag}</span>
             ))}
           </div>
+
+          {project.id === "noxi" && (
+            <div
+              data-work-reveal
+              style={{
+                maxWidth: 490,
+                marginTop: 22,
+                padding: "15px 17px",
+                background: "rgba(255, 48, 79, 0.075)",
+                borderLeft: "2px solid #ff304f",
+                color: "#c7bbc1",
+                fontSize: 12,
+                lineHeight: 1.65,
+              }}
+            >
+              <span
+                style={{
+                  display: "flex",
+                  gap: 8,
+                  alignItems: "center",
+                  color: "#ff647b",
+                  fontWeight: 800,
+                  letterSpacing: "0.09em",
+                  marginBottom: 5,
+                }}
+              >
+                <LockKeyhole size={14} aria-hidden="true" />
+                LIMITED SPOTIFY ACCESS
+              </span>
+              NOXI is currently in Spotify Development Mode.
+              Only Spotify accounts approved for testing can
+              use the login.
+            </div>
+          )}
 
           <a
             className="work-project-link"
@@ -594,7 +668,10 @@ export default function Section4() {
   const scrollToFirstProject = () => {
     document
       .getElementById("work-pure-sa")
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      ?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
   };
 
   return (
@@ -649,7 +726,10 @@ export default function Section4() {
 
       <div className="work-projects">
         {projects.map((project) => (
-          <ProjectPanel key={project.id} project={project} />
+          <ProjectPanel
+            key={project.id}
+            project={project}
+          />
         ))}
       </div>
 
