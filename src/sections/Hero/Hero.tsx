@@ -1,3 +1,4 @@
+
 import { useLayoutEffect, useRef } from "react";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import gsap from "gsap";
@@ -225,12 +226,18 @@ export default function Hero({
             className="hero-cinematic-actions"
             data-hero-reveal
           >
-            <a href="#work" className="hero-cinematic-primary">
+            <a
+              href="#projects"
+              className="hero-cinematic-primary"
+            >
               EXPLORE MY WORK
               <ArrowUpRight size={19} />
             </a>
 
-            <a href="#contact" className="hero-cinematic-secondary">
+            <a
+              href="#contact"
+              className="hero-cinematic-secondary"
+            >
               LET&apos;S TALK
               <ArrowUpRight size={19} />
             </a>
@@ -241,7 +248,10 @@ export default function Hero({
           className="hero-cinematic-footer"
           data-hero-reveal
         >
-          <a href="#work" className="hero-cinematic-scroll">
+          <a
+            href="#projects"
+            className="hero-cinematic-scroll"
+          >
             SCROLL TO EXPLORE
             <ArrowDownRight size={19} />
           </a>
